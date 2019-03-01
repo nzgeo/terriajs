@@ -210,6 +210,34 @@ class GetCapabilitiesStratum implements WebMapServiceCatalogItemTraits {
     @observable intervals: any;
 }
 
+function waitSeconds(s: number) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(), s*1000);
+    })
+}
+
+function testNextTimePreload(wmsItem: WebMapServiceCatalogItem) {
+    if (wmsItem.url !== 'https://programs.communications.gov.au/geoserver/ows') {
+        return;
+    }
+    Promise.resolve().then(() => {
+        // Start test by setting community black spots as current layer and funded base stations as next
+        wmsItem.testState = 1;
+        console.log('\nStarting test\n');
+        return waitSeconds(5)
+    }).then(() => {
+        // Set funded base stations as current layer and ADSL availability as next
+        wmsItem.testState = 2;
+        console.log('\nTest prefetched layer\n');
+        return waitSeconds(5)
+    }).then(() => {
+        // Set quality as current layer and no next layer
+        // Note: quality layer was not the previous "next" layer so should load in slowly
+        wmsItem.testState = 3;
+        console.log('\nTest non prefetched\n');
+    });
+}
+
 class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemberMixin(Model(WebMapServiceCatalogItemTraits)))) implements Mappable {
     /**
      * The collection of strings that indicate an Abstract property should be ignored.  If these strings occur anywhere
@@ -231,6 +259,8 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
     static readonly type = 'wms';
     readonly canZoomTo = true;
     readonly showsInfo = true;
+
+    testState = 0;
 
     @observable
     show: boolean | undefined;
@@ -266,6 +296,7 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
     }
 
     loadData(): Promise<void> {
+        setTimeout(() => testNextTimePreload(this), 5000);
         return this.loadMetadata();
     }
 
@@ -310,12 +341,43 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
 
     @computed
     get currentDiscreteTime(): string | undefined {
-        return undefined; // TODO
+        // return undefined; // TODO
+
+        // Running a next-layer prefetch using multiple layers in community black spots WMS
+        // Using "time" to instead return what layer to use
+        if (this.url !== 'https://programs.communications.gov.au/geoserver/ows') {
+            return undefined;
+        }
+        if (this.testState === 1) {
+            return 'mobile-black-spot-programme:database';
+        }
+        if (this.testState === 2) {
+            return 'mobile-black-spot-programme:funded-base-stations';
+        }
+        if (this.testState === 3) {
+            return 'mybroadband:MyBroadband_ADSL_Quality';
+        }
     }
 
     @computed
     get nextDiscreteTime(): string | undefined {
-        return undefined; // TODO
+        // return undefined; // TODO
+
+        // Running a next-layer prefetch using multiple layers in community black spots WMS
+        // Using "time" to instead return what layer to use
+        if (this.url !== 'https://programs.communications.gov.au/geoserver/ows') {
+            return undefined;
+        }
+        if (this.testState === 1) {
+            return 'mobile-black-spot-programme:funded-base-stations';
+        }
+        if (this.testState === 2) {
+            return 'mybroadband:MyBroadband_ADSL_Availability';
+        }
+        if (this.testState === 3) {
+            // This isn't really needed, but it's here so that we're also loading a new prefetched layer
+            return 'mobile-black-spot-programme:database';
+        }
     }
 
     @computed
