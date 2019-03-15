@@ -7,34 +7,28 @@
 // 3. Observable spaghetti
 //  Solution: think in terms of pipelines with computed observables, document patterns.
 // 4. All code for all catalog item types needs to be loaded before we can do anything.
-import { computed, observable, trace, action, runInAction, autorun } from 'mobx';
-import { createTransformer } from 'mobx-utils'
+import { autorun, computed, observable, runInAction, trace } from 'mobx';
+import { createTransformer } from 'mobx-utils';
+import Rectangle from 'terriajs-cesium/Source/Core/Rectangle';
+import WebMercatorTilingScheme from 'terriajs-cesium/Source/Core/WebMercatorTilingScheme';
+import WebMapServiceImageryProvider from 'terriajs-cesium/Source/Scene/WebMapServiceImageryProvider';
 import URI from 'urijs';
-import LoadableStratum from '../../test/Models/LoadableStratum';
-import autoUpdate from '../Core/autoUpdate';
+import containsAny from '../Core/containsAny';
 import isReadOnlyArray from '../Core/isReadOnlyArray';
 import TerriaError from '../Core/TerriaError';
 import CatalogMemberMixin from '../ModelMixins/CatalogMemberMixin';
 import GetCapabilitiesMixin from '../ModelMixins/GetCapabilitiesMixin';
+import GroupMixin from '../ModelMixins/GroupMixin';
+import OpacityMixin from '../ModelMixins/OpacityMixin';
 import UrlMixin from '../ModelMixins/UrlMixin';
+import { InfoSectionTraits } from '../Traits/mixCatalogMemberTraits';
 import WebMapServiceCatalogItemTraits from '../Traits/WebMapServiceCatalogItemTraits';
+import LoadableStratum from './LoadableStratum';
 import Mappable, { ImageryParts } from './Mappable';
 import Model from './Model';
 import proxyCatalogItemUrl from './proxyCatalogItemUrl';
 import Terria from './Terria';
 import WebMapServiceCapabilities, { CapabilitiesLayer, CapabilitiesStyle, getRectangleFromLayer } from './WebMapServiceCapabilities';
-import { InfoSectionTraits } from '../Traits/mixCatalogMemberTraits';
-import containsAny from '../Core/containsAny';
-import GroupMixin from '../ModelMixins/GroupMixin';
-
-import WebMapServiceImageryProvider from 'terriajs-cesium/Source/Scene/WebMapServiceImageryProvider';
-import CesiumImageryLayer from 'terriajs-cesium/Source/Scene/ImageryLayer';
-import WebMercatorTilingScheme from 'terriajs-cesium/Source/Core/WebMercatorTilingScheme';
-import CatalogItem from '../ReactViews/DataCatalog/CatalogItem';
-import CommonStrata from './CommonStrata';
-import Rectangle from 'terriajs-cesium/Source/Core/Rectangle';
-
-
 
 interface LegendUrl {
     url: string;
@@ -52,9 +46,10 @@ interface WebMapServiceStyles {
     [layerName: string]: WebMapServiceStyle[];
 }
 
-
-class GetCapabilitiesStratum implements WebMapServiceCatalogItemTraits {
-    constructor(readonly catalogItem: WebMapServiceCatalogItem) { }
+class GetCapabilitiesStratum extends LoadableStratum(WebMapServiceCatalogItemTraits) {
+    constructor(readonly catalogItem: WebMapServiceCatalogItem) {
+        super();
+    }
 
     @observable
     capabilities: WebMapServiceCapabilities | undefined;
@@ -210,35 +205,7 @@ class GetCapabilitiesStratum implements WebMapServiceCatalogItemTraits {
     @observable intervals: any;
 }
 
-function waitSeconds(s: number) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), s*1000);
-    })
-}
-
-function testNextTimePreload(wmsItem: WebMapServiceCatalogItem) {
-    if (wmsItem.url !== 'https://programs.communications.gov.au/geoserver/ows') {
-        return;
-    }
-    Promise.resolve().then(() => {
-        // Start test by setting community black spots as current layer and funded base stations as next
-        wmsItem.testState = 1;
-        console.log('\nStarting test\n');
-        return waitSeconds(5)
-    }).then(() => {
-        // Set funded base stations as current layer and ADSL availability as next
-        wmsItem.testState = 2;
-        console.log('\nTest prefetched layer\n');
-        return waitSeconds(5)
-    }).then(() => {
-        // Set quality as current layer and no next layer
-        // Note: quality layer was not the previous "next" layer so should load in slowly
-        wmsItem.testState = 3;
-        console.log('\nTest non prefetched\n');
-    });
-}
-
-class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemberMixin(Model(WebMapServiceCatalogItemTraits)))) implements Mappable {
+class WebMapServiceCatalogItem extends GetCapabilitiesMixin(OpacityMixin(UrlMixin(CatalogMemberMixin(Model(WebMapServiceCatalogItemTraits))))) implements Mappable {
     /**
      * The collection of strings that indicate an Abstract property should be ignored.  If these strings occur anywhere
      * in the Abstract, the Abstract will not be used.  This makes it easy to filter out placeholder data like
@@ -296,7 +263,6 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
     }
 
     loadData(): Promise<void> {
-        setTimeout(() => testNextTimePreload(this), 5000);
         return this.loadMetadata();
     }
 
@@ -341,43 +307,12 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
 
     @computed
     get currentDiscreteTime(): string | undefined {
-        // return undefined; // TODO
-
-        // Running a next-layer prefetch using multiple layers in community black spots WMS
-        // Using "time" to instead return what layer to use
-        if (this.url !== 'https://programs.communications.gov.au/geoserver/ows') {
-            return undefined;
-        }
-        if (this.testState === 1) {
-            return 'mobile-black-spot-programme:database';
-        }
-        if (this.testState === 2) {
-            return 'mobile-black-spot-programme:funded-base-stations';
-        }
-        if (this.testState === 3) {
-            return 'mybroadband:MyBroadband_ADSL_Quality';
-        }
+        return undefined; // TODO
     }
 
     @computed
     get nextDiscreteTime(): string | undefined {
-        // return undefined; // TODO
-
-        // Running a next-layer prefetch using multiple layers in community black spots WMS
-        // Using "time" to instead return what layer to use
-        if (this.url !== 'https://programs.communications.gov.au/geoserver/ows') {
-            return undefined;
-        }
-        if (this.testState === 1) {
-            return 'mobile-black-spot-programme:funded-base-stations';
-        }
-        if (this.testState === 2) {
-            return 'mybroadband:MyBroadband_ADSL_Availability';
-        }
-        if (this.testState === 3) {
-            // This isn't really needed, but it's here so that we're also loading a new prefetched layer
-            return 'mobile-black-spot-programme:database';
-        }
+        return undefined; // TODO
     }
 
     @computed
@@ -417,7 +352,7 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
         }
         return {
             imageryProvider,
-            alpha: this.opacity!,
+            alpha: this.opacity,
             show: this.show !== undefined ? this.show : true
         }
     }
@@ -458,9 +393,7 @@ class WebMapServiceCatalogItem extends GetCapabilitiesMixin(UrlMixin(CatalogMemb
 
         return new WebMapServiceImageryProvider({
             url: this.url || '',
-            // layers: this.layers || '',
-            // For testing prefetching
-            layers: time !== 'now' ? time : (this.layers || ''),
+            layers: this.layers || '',
             // getFeatureInfoFormats: this.getFeatureInfoFormats,
             // parameters: parameters,
             parameters: WebMapServiceCatalogItem.defaultParameters,
