@@ -28,7 +28,8 @@ const TerriaViewerWrapper = createReactClass({
       developerAttribution: {
         text: "Data61",
         link: "http://www.csiro.au/en/Research/D61"
-      }
+      },
+      maximumLeafletZoomLevel: 21
     });
   },
 
