@@ -273,7 +273,7 @@
   },
   "preview": {
     "doesNotContainGeospatialData": "This file does not contain geospatial data.",
-    "selectToPreview": "<0>Select a dataset to see a preview </0><1>- OR -</1><2>Go to the map</2>",
+    "selectToPreview": "<0>Click GNZ Services to view a list of service URLs </0><1>- OR -</1><2>Go to the map</2>",
     "loading": "PREVIEW LOADING...",
     "preview": "{{appName}} preview",
     "noPreviewAvailable": "NO PREVIEW AVAILABLE",
