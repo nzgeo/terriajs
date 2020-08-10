@@ -74,7 +74,7 @@ const TerriaViewerWrapper = createReactClass({
     this.props.viewState.mouseCoords.updateZoomLevel(
       this.props.terria
     );
-  }
+  },
 
   onWheel(event) {
     this.props.viewState.mouseCoords.updateZoomLevel(
