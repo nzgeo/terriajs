@@ -17,7 +17,7 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'https://cdn.polyfill.io/v2/polyfill.min.js',
+            '/polyfill/v2/polyfill.min.js',
             'build/TerriaJS-specs.js',
             {
                 pattern: '**/*',
