@@ -70,6 +70,18 @@ const TerriaViewerWrapper = createReactClass({
     }
   },
 
+  onClick(event) {
+    this.props.viewState.mouseCoords.updateZoomLevel(
+      this.props.terria
+    );
+  }
+
+  onWheel(event) {
+    this.props.viewState.mouseCoords.updateZoomLevel(
+      this.props.terria
+    );
+  },
+
   render() {
     return (
       <aside className={Styles.container}>
@@ -84,6 +96,8 @@ const TerriaViewerWrapper = createReactClass({
             this.mapElement = element;
           }}
           onMouseMove={this.onMouseMove}
+          onWheel={this.onWheel}
+          onClick={this.onClick}
         />
       </aside>
     );
