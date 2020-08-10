@@ -59,7 +59,8 @@
     "zone": "ZONE",
     "e": "E",
     "n": "N",
-    "elev": "Elev"
+    "elev": "Elev",
+    "level": "Level"
   },
   "share": {
     "browserPrint": "For better printed results, please use {{appName}}'s Print button instead of your web browser's print feature.",
