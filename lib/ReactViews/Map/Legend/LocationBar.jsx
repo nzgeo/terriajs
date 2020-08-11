@@ -68,10 +68,6 @@ const LocationBar = createReactClass({
           <span>{t("legend.elev")}</span>
           <span>{this.props.mouseCoords.elevation}</span>
         </div>
-        <div className={Styles.section}>
-            <span>{t("legend.level")}</span>
-            <span>{this.props.mouseCoords.level}</span>
-        </div>
       </button>
     );
   }
