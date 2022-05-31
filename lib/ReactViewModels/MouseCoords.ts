@@ -165,8 +165,7 @@ export default class MouseCoords {
     }
 
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
-    // this.level = terria.leaflet.map.getZoom();
-    this.level = "LEAFLET"
+    this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(latLng.lng, latLng.lat);
     coordinates.height = <any>undefined;
     this.cartographicToFields(coordinates);
