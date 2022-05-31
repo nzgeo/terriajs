@@ -38,7 +38,7 @@ export default class MouseCoords {
   tileRequestInFlight?: unknown;
 
   @observable elevation?: string;
-  @observable level?: string;
+  @observable level?: unknown;
   @observable utmZone?: unknown;
   @observable latitude?: string;
   @observable longitude?: string;
