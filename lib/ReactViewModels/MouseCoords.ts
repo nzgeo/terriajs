@@ -38,7 +38,7 @@ export default class MouseCoords {
   tileRequestInFlight?: unknown;
 
   @observable elevation?: string;
-  @observable level?: unknown;
+  @observable level?: number;
   @observable utmZone?: unknown;
   @observable latitude?: string;
   @observable longitude?: string;
@@ -80,7 +80,7 @@ export default class MouseCoords {
     const pickRay = camera.getPickRay(position);
     const globe = scene.globe;
     const pickedTriangle = (<any>globe).pickTriangle(pickRay, scene);
-    this.level = "N/A";
+    this.level = undefined;
     if (isDefined(pickedTriangle)) {
       // Get a fast, accurate-ish height every time the mouse moves.
       const ellipsoid = globe.ellipsoid;
