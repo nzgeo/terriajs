@@ -165,10 +165,17 @@ export default class MouseCoords {
     }
 
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
-    this.level = terria.leaflet.map.getZoom();
+    // this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(latLng.lng, latLng.lat);
     coordinates.height = <any>undefined;
     this.cartographicToFields(coordinates);
+  }
+
+  updateZoomLevelFromLeaflet(terria: Terria, zoomEvent: ZoomAnimEvent) {
+    if (!terria.leaflet) {
+      return;
+    }
+    this.level = terria.leaflet.map.getZoom(zoomEvent);
   }
 
   @action
