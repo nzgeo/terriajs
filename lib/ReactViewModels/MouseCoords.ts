@@ -171,11 +171,11 @@ export default class MouseCoords {
     this.cartographicToFields(coordinates);
   }
 
-  updateZoomLevelFromLeaflet(terria: Terria, zoomEvent: ZoomAnimEvent) {
+  updateZoomLevelFromLeaflet(terria: Terria) {
     if (!terria.leaflet) {
       return;
     }
-    this.level = terria.leaflet.map.getZoom(zoomEvent);
+    this.level = terria.leaflet.map.getZoom();
   }
 
   @action
