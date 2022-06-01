@@ -242,9 +242,11 @@ export default class Leaflet extends GlobeOrMap {
       });
 
       // Update zoom level on zoom event
-      this.map.on('mapzoomed', (e:L.LeafletEvent) => {
+      this.map.on("mapzoomed", (e:L.LeafletEvent) => {
+        const zoomEvent = <L.LeafletEvent>e;
         this.mouseCoords.updateZoomLevelFromLeaflet(
-          this.terria
+          this.terria,
+          zoomEvent.originalEvent
         );
       });
 
