@@ -110,7 +110,7 @@ const DataPreview = observer(
             <Otherwise>
               <div className={Styles.placeholder}>
                 <Trans i18nKey="preview.selectToPreview">
-                  <p>Select a dataset to see a preview</p>
+                  <p>Click GNZ Services to view a list of service URLs</p>
                   <p>- OR -</p>
                   <button
                     className={Styles.btnBackToMap}
