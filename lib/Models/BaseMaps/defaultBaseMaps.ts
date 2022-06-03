@@ -14,7 +14,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       maximumLevel: 22,
       opacity: 1.0
     },
-    image: "build/TerriaJS/images/natural-earth.png",
+    image: "build/TerriaJS/images/basemap-osm-bright.png",
     contrastColor: "#000000"
   });
 
