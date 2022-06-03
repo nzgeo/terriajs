@@ -5,7 +5,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
   const baseMaps: BaseMapJson[] = [];
   baseMaps.push({
     item: {
-      id: "basemap-osm-bright",
+      id: "osm_bright",
       name: "OSM Bright",
       type: "wmts",
       layer: "osm_bright",
