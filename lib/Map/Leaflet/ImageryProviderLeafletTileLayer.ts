@@ -51,7 +51,9 @@ export default class ImageryProviderLeafletTileLayer extends L.TileLayer {
   constructor(
     private leaflet: Leaflet,
     readonly imageryProvider: ImageryProvider,
-    options: L.TileLayerOptions = {}
+    options: L.TileLayerOptions = {
+      maxZoom: 22
+    }
   ) {
     super(<any>undefined, {
       ...options,
