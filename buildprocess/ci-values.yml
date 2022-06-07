@@ -59,7 +59,6 @@ terriamap:
             brandBarElements: ["", "<a target=\"_blank\" href=\"http://terria.io\"><img src=\"images/terria_logo.png\" height=\"52\" title=\"Version: {{version}}\" /></a>", ""]
             supportEmail: "info@terria.io"
             mobileDefaultViewerMode: "2d"
-            maximumLeafletZoomLevel: 22
             experimentalFeatures: true
             feedbackUrl: "feedback"
             helpContent:
