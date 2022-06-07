@@ -10,7 +10,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "osm_bright",
       url:
-        "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
+        "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
+        // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       maximumLevel: 22,
       opacity: 1.0
     },
