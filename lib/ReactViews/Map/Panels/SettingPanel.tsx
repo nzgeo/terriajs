@@ -202,7 +202,7 @@ class SettingPanel extends React.Component<PropTypes> {
       this.props.terria.configParameters.useCesiumIonTerrain ||
       this.props.terria.configParameters.cesiumTerrainUrl
     ) {
-      MapViewers["3d"].available = true;
+      MapViewers["3d"].available = false;
     }
 
     const supportsSide = isCesiumWithTerrain;
