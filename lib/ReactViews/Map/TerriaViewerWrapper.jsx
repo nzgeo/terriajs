@@ -19,7 +19,8 @@ import TerriaViewer from "../../ViewModels/TerriaViewer";
 class TerriaViewerWrapper extends React.Component {
   static propTypes = {
     terria: PropTypes.object.isRequired,
-    viewState: PropTypes.object.isRequired
+    viewState: PropTypes.object.isRequired,
+    maximumLeafletZoomLevel: 22
   };
 
   /**
