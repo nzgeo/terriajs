@@ -427,7 +427,7 @@ export default class Terria {
     storyEnabled: true,
     interceptBrowserPrint: true,
     tabbedCatalog: false,
-    useCesiumIonTerrain: true,
+    useCesiumIonTerrain: false,
     cesiumTerrainUrl: undefined,
     cesiumTerrainAssetId: undefined,
     cesiumIonAccessToken: undefined,
