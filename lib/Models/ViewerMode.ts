@@ -7,12 +7,12 @@ enum ViewerMode {
 }
 
 export const MapViewers = Object.seal({
-  // "3d": {
-  //   viewerMode: ViewerMode.Cesium,
-  //   terrain: true,
-  //   label: "settingPanel.viewerModeLabels.CesiumTerrain",
-  //   available: true
-  // },
+  "3d": {
+    viewerMode: ViewerMode.Cesium,
+    terrain: true,
+    label: "settingPanel.viewerModeLabels.CesiumTerrain",
+    available: true
+  },
   "3dsmooth": {
     viewerMode: ViewerMode.Cesium,
     terrain: false,
@@ -35,9 +35,9 @@ export function setViewerMode(
   viewer: TerriaViewer
 ): void {
   runInAction(() => {
-    if (viewerMode === "3d") { // || viewerMode === "3dsmooth") {
+    if (viewerMode === "3d" || viewerMode === "3dsmooth") {
       viewer.viewerMode = ViewerMode.Cesium;
-      // viewer.viewerOptions.useTerrain = viewerMode === "3d";
+      viewer.viewerOptions.useTerrain = viewerMode === "3d";
     } else if (viewerMode === "2d") {
       viewer.viewerMode = ViewerMode.Leaflet;
     } else {
