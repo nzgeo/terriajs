@@ -31,7 +31,7 @@ interface ViewerOptions {
 }
 
 const viewerOptionsDefaults: ViewerOptions = {
-  useTerrain: true
+  useTerrain: false
 };
 
 export default class TerriaViewer {
