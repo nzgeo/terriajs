@@ -271,7 +271,6 @@ export default class ImageryProviderLeafletTileLayer extends L.TileLayer {
 
         if (isDefined(this.imageryProvider.maximumLevel)) {
           this.options.maxNativeZoom = this.imageryProvider.maximumLevel;
-          this.options.maxZoom = 22;
         }
 
         if (defined(this.imageryProvider.minimumLevel)) {
