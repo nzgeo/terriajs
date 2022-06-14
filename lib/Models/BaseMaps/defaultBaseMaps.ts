@@ -12,7 +12,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maximumLevel: 22,
+      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-osm-bright.png",
@@ -27,7 +27,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maximumLevel: 22,
+      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-osm-basic.png",
@@ -42,7 +42,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maximumLevel: 22,
+      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-osm-positron.png",
@@ -57,7 +57,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maximumLevel: 22,
+      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-osm-street.png",
@@ -72,7 +72,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maximumLevel: 22,
+      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-osm-terrain.png",
@@ -87,7 +87,7 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maximumLevel: 22,
+      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-imagery.png",
