@@ -164,6 +164,8 @@ export default class MouseCoords {
       return;
     }
     this.level = getZoom;
+    console.log("updateZoomFromLeaflet")
+    console.log(this.level)
   }
 
   updateCoordinatesFromLeaflet(terria: Terria, mouseMoveEvent: MouseEvent) {
