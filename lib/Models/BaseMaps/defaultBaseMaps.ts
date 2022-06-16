@@ -68,7 +68,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-osm-terrain.png",
@@ -83,7 +82,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       url:
         "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         // "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      maxZoom: 22,
       opacity: 1.0
     },
     image: "build/TerriaJS/images/basemap-imagery.png",
