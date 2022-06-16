@@ -233,6 +233,14 @@ export default class Leaflet extends GlobeOrMap {
         this._featurePicked(entity, event);
       };
 
+      // update zoom level on zoom end
+      this.map.on("zoomend", (e: L.LeafletEvent) => {
+        const zoomEndEvent = <L.LeafletEvent>e;
+        this.mouseCoords.updateZoomFromLeaflet(
+          this.terria
+        );
+      });
+
       // Update mouse coords on mouse move
       this.map.on("mousemove", (e: L.LeafletEvent) => {
         const mouseEvent = <L.LeafletMouseEvent>e;
@@ -480,6 +488,7 @@ export default class Leaflet extends GlobeOrMap {
         if (!isDefined(extent)) {
           // Zoom to the first item!
           return this.doZoomTo(target.mapItems[0], flightDurationSeconds);
+          
         }
       } else {
         extent = target.rectangle;
