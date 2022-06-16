@@ -238,7 +238,7 @@ export default class Leaflet extends GlobeOrMap {
         const zoomEvent = <L.LeafletEvent>e;
         this.mouseCoords.updateZoomFromLeaflet(
           this.terria,
-          zoomEvent.Event
+          zoomEvent.originalEvent
         );
       });
 
