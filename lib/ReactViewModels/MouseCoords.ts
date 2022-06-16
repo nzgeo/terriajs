@@ -159,13 +159,22 @@ export default class MouseCoords {
     }
   }
 
+  updateZoomFromLeaflet(terria: Terria, zoomEvent: Event) {
+    if (!terria.leaflet) {
+      return;
+    }
+
+    const zoomender = zoomEvent
+    this.level = terria.leaflet.map.getZoom();
+  }
+
   updateCoordinatesFromLeaflet(terria: Terria, mouseMoveEvent: MouseEvent) {
     if (!terria.leaflet) {
       return;
     }
 
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
-    // this.level = terria.leaflet.map.getZoom();
+    this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(latLng.lng, latLng.lat);
     coordinates.height = <any>undefined;
     this.cartographicToFields(coordinates);
