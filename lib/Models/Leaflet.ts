@@ -91,6 +91,7 @@ export default class Leaflet extends GlobeOrMap {
   @observable size: L.Point | undefined;
   @observable nw: L.Point | undefined;
   @observable se: L.Point | undefined;
+  level?: any;
 
   @action
   private updateMapObservables() {
@@ -235,9 +236,7 @@ export default class Leaflet extends GlobeOrMap {
 
       // update zoom level on zoom end
       this.map.on("zoomend", (e: L.LeafletEvent) => {
-        this.mouseCoords.updateZoomFromLeaflet(
-          this.terria
-        );
+        this.level = this.map.getZoom()
       });
 
       // Update mouse coords on mouse move
