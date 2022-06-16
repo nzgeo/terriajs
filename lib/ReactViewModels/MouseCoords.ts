@@ -159,11 +159,11 @@ export default class MouseCoords {
     }
   }
 
-  updateZoomFromLeaflet(terria: Terria) {
+  updateZoomFromLeaflet(terria: Terria, getZoom: number) {
     if (!terria.leaflet) {
       return;
     }
-    this.level = terria.leaflet.map.getZoom();
+    this.level = getZoom;
   }
 
   updateCoordinatesFromLeaflet(terria: Terria, mouseMoveEvent: MouseEvent) {
