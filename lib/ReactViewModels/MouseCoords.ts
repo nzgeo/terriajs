@@ -36,8 +36,8 @@ export default class MouseCoords {
   ) => void) &
     Cancelable;
   tileRequestInFlight?: unknown;
-  
-  @observable level?: any;
+
+  level?: any;
 
   @observable elevation?: string;
   @observable utmZone?: unknown;
@@ -164,6 +164,7 @@ export default class MouseCoords {
     if (!terria.leaflet) {
       return;
     }
+    
     this.level = getZoom;
     console.log("updateZoomFromLeaflet")
     console.log(this.level)
