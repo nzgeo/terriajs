@@ -198,12 +198,12 @@ class SettingPanel extends React.Component<PropTypes> {
       ? t("settingPanel.terrain.showUndergroundFeatures")
       : t("settingPanel.terrain.hideUndergroundFeatures");
 
-    if (
-      this.props.terria.configParameters.useCesiumIonTerrain ||
-      this.props.terria.configParameters.cesiumTerrainUrl
-    ) {
-      MapViewers["3d"].available = false;
-    }
+    // if (
+    //   this.props.terria.configParameters.useCesiumIonTerrain ||
+    //   this.props.terria.configParameters.cesiumTerrainUrl
+    // ) {
+    //   // MapViewers["3d"].available = false;
+    // }
 
     const supportsSide = isCesiumWithTerrain;
 
