@@ -36,7 +36,8 @@ export default class MouseCoords {
   ) => void) &
     Cancelable;
   tileRequestInFlight?: unknown;
-  level?: any;
+  
+  @observable level?: any;
 
   @observable elevation?: string;
   @observable utmZone?: unknown;
