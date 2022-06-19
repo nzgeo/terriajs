@@ -239,7 +239,7 @@ class SettingPanel extends React.Component<PropTypes> {
           <Box paddedVertically={1}>
             <Text as="label">{t("settingPanel.mapView")}</Text>
           </Box>
-          <FlexGrid gap={1} elementsNo={3}>
+          <FlexGrid gap={1} elementsNo={2}>
             {Object.entries(MapViewers).map(([key, viewerMode]) => (
               <SettingsButton
                 key={key}
@@ -302,7 +302,7 @@ class SettingPanel extends React.Component<PropTypes> {
                   {this.activeMapName}
                 </Text>
               </Box>
-              <FlexGrid gap={1} elementsNo={4}>
+              <FlexGrid gap={1} elementsNo={3}>
                 {this.props.terria.baseMapsModel.baseMapItems.map(baseMap => (
                   <StyledBasemapButton
                     key={baseMap.item?.uniqueId}
