@@ -11,7 +11,7 @@ export const MapViewers = Object.seal({
     viewerMode: ViewerMode.Cesium,
     terrain: true,
     label: "settingPanel.viewerModeLabels.CesiumTerrain",
-    available: true
+    available: false
   },
   "3dsmooth": {
     viewerMode: ViewerMode.Cesium,
