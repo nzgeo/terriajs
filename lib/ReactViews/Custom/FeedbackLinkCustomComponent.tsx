@@ -12,7 +12,7 @@ import parseCustomMarkdownToReact from "./parseCustomMarkdownToReact";
 
 function showFeedback(viewState: ViewState) {
   runInAction(() => {
-    viewState.feedbackFormIsVisible = true;
+    viewState.feedbackFormIsVisible = false;
     viewState.terria.notificationState.dismissCurrentNotification();
   });
 }
