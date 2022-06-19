@@ -60,7 +60,7 @@ terriamap:
             supportEmail: "info@terria.io"
             mobileDefaultViewerMode: "2d"
             experimentalFeatures: true
-            feedbackUrl: "feedback"
+            # feedbackUrl: "feedback"
             helpContent:
                 -
                   title: "Getting started with the map"
