@@ -422,7 +422,7 @@ export default class Terria {
     proxyableDomainsUrl: "proxyabledomains/", // deprecated, will be determined from serverconfig
     serverConfigUrl: "serverconfig/",
     shareUrl: "share",
-    // feedbackUrl: undefined,
+    feedbackUrl: undefined,
     initFragmentPaths: ["init/"],
     storyEnabled: true,
     interceptBrowserPrint: true,
