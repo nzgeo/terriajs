@@ -279,20 +279,20 @@
       "right": "Right"
     }
   },
-  // "feedback": {
-  //   "feedbackPreamble": "We would love to hear from you!",
-  //   "title": "Feedback",
-  //   "close": "close feedback",
-  //   "yourName": "Your name (optional)",
-  //   "email": "Email address (optional)<br/><em>We can't follow up without it!</em>",
-  //   "commentQuestion": "Comment or question",
-  //   "shareWithDevelopers": "Share my map view with {{appName}} developers",
-  //   "cancel": "Cancel",
-  //   "sending": "Sending...",
-  //   "send": "Send",
-  //   "feedbackBtnText": "Give Feedback",
-  //   "minLength": "Minimum length of feedback comment is {{minLength}}"
-  // },
+  "feedback": {
+    "feedbackPreamble": "We would love to hear from you!",
+    "title": "Feedback",
+    "close": "close feedback",
+    "yourName": "Your name (optional)",
+    "email": "Email address (optional)<br/><em>We can't follow up without it!</em>",
+    "commentQuestion": "Comment or question",
+    "shareWithDevelopers": "Share my map view with {{appName}} developers",
+    "cancel": "Cancel",
+    "sending": "Sending...",
+    "send": "Send",
+    "feedbackBtnText": "Give Feedback",
+    "minLength": "Minimum length of feedback comment is {{minLength}}"
+  },
   "helpPanel": {
     "btnText": "Help",
     "menuPaneTitle": "We're here to help",
