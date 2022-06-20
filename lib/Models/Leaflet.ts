@@ -250,6 +250,7 @@ export default class Leaflet extends GlobeOrMap {
       // Update mouse coords on mouse move
       this.map.on("mousemove", (e: L.LeafletEvent) => {
         const mouseEvent = <L.LeafletMouseEvent>e;
+        console.log(mouseEvent)
         this.mouseCoords.updateCoordinatesFromLeaflet(
           this.terria,
           mouseEvent.originalEvent
