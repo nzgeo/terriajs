@@ -37,7 +37,7 @@ export default class MouseCoords {
     Cancelable;
   tileRequestInFlight?: unknown;
 
-  mapLevel?: any;
+  level?: any;
 
   @observable elevation?: string;
   @observable utmZone?: unknown;
@@ -81,7 +81,7 @@ export default class MouseCoords {
     const pickRay = camera.getPickRay(position);
     const globe = scene.globe;
     const pickedTriangle = (<any>globe).pickTriangle(pickRay, scene);
-    this.mapLevel = "N/A"
+    this.level = "N/A"
     if (isDefined(pickedTriangle)) {
       // Get a fast, accurate-ish height every time the mouse moves.
       const ellipsoid = globe.ellipsoid;
@@ -150,7 +150,7 @@ export default class MouseCoords {
     } else {
       runInAction(() => {
         this.elevation = undefined;
-        this.mapLevel = undefined;
+        this.level = undefined;
         this.utmZone = undefined;
         this.latitude = undefined;
         this.longitude = undefined;
@@ -165,9 +165,9 @@ export default class MouseCoords {
       return;
     }
 
-    this.mapLevel = getZoom;
+    this.level = getZoom;
     console.log("updateZoomFromLeaflet")
-    console.log(this.mapLevel)
+    console.log(this.level)
   }
 
   updateCoordinatesFromLeaflet(terria: Terria, mouseMoveEvent: MouseEvent) {
@@ -176,7 +176,7 @@ export default class MouseCoords {
     }
 
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
-    this.mapLevel = terria.leaflet.map.getZoom();
+    this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(latLng.lng, latLng.lat);
     coordinates.height = <any>undefined;
     this.cartographicToFields(coordinates);
