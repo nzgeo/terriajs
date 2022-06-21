@@ -81,7 +81,7 @@ export default class MouseCoords {
     const pickRay = camera.getPickRay(position);
     const globe = scene.globe;
     const pickedTriangle = (<any>globe).pickTriangle(pickRay, scene);
-    this.level = "N/A"
+    this.level = "N/A";
     if (isDefined(pickedTriangle)) {
       // Get a fast, accurate-ish height every time the mouse moves.
       const ellipsoid = globe.ellipsoid;
@@ -174,7 +174,7 @@ export default class MouseCoords {
     if (!terria.leaflet) {
       return;
     }
-
+    console.log(mouseMoveEvent);
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
     this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(latLng.lng, latLng.lat);
