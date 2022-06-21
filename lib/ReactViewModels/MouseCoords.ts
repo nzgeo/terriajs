@@ -175,6 +175,11 @@ export default class MouseCoords {
       return;
     }
     console.log(mouseMoveEvent);
+    if (mouseMoveEvent == undefined) {
+      console.log(terria.leaflet.map.getZoom());
+      this.level = terria.leaflet.map.getZoom();
+      return;
+    }
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
     this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(latLng.lng, latLng.lat);
