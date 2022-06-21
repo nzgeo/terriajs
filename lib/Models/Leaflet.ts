@@ -236,19 +236,11 @@ export default class Leaflet extends GlobeOrMap {
       // update zoom level on zoom end
       this.map.on("zoomend", (e: L.LeafletEvent) => {
         // const zoomEvent = <L.LeafletEvent>e;
-        console.log("zoomend");
+        // console.log("zoomend");
         // console.log("It triggered from leaflet.ts!");
-        let evt = <L.LeafletMouseEvent>e;
-        this.mouseCoords.updateCoordinatesFromLeaflet(
-          this.terria,
-          evt.originalEvent
-        );
-        // const getZoom = this.map.getZoom();
-        // // console.log(getZoom);
-        // this.mouseCoords.updateZoomFromLeaflet(
-        //   this.terria,
-        //   getZoom
-        // );
+        const getZoom = this.map.getZoom();
+        // console.log(getZoom);
+        this.mouseCoords.updateZoomFromLeaflet(this.terria, getZoom);
       });
 
       // Update mouse coords on mouse move
