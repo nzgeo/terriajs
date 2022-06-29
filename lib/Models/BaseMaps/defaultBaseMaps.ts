@@ -10,7 +10,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "osm_bright",
       url:
-        // "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       opacity: 1.0
     },
@@ -24,7 +23,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "osm_basic",
       url:
-        // "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       opacity: 1.0
     },
@@ -38,7 +36,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "osm_positron",
       url:
-        // "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       opacity: 1.0
     },
@@ -52,7 +49,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "osm_street",
       url:
-        // "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       opacity: 1.0
     },
@@ -66,7 +62,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "osm_terrain",
       url:
-        // "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       opacity: 1.0
     },
@@ -80,7 +75,6 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       type: "wmts",
       layer: "imagery_label",
       url:
-        // "http://localhost/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
       opacity: 1.0
     },
