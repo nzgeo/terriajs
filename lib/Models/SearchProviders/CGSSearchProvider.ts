@@ -4,6 +4,7 @@ import defined from "terriajs-cesium/Source/Core/defined";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
 import Resource from "terriajs-cesium/Source/Core/Resource";
 import loadJsonp from "../../Core/loadJsonp";
+// import loadWithXhr from "../../Core/loadWithXhr";
 import SearchProvider from "./SearchProvider";
 import SearchResult from "./SearchResult";
 import Terria from "../Terria";
@@ -12,7 +13,7 @@ import SearchProviderResults from "./SearchProviderResults";
  interface CGSSearchProviderOptions {
     terria: Terria;
     url?: string;
-    key?: string;
+    auth?: string;
     searchTerm?: string;
     maxResults?: number;
     flightDurationSeconds?: number;
@@ -21,7 +22,7 @@ import SearchProviderResults from "./SearchProviderResults";
 export default class CGSSearchProvider extends SearchProvider{
     readonly terria: Terria;
     @observable url: string;
-    @observable key: string | undefined;
+    @observable auth: string | undefined;
     @observable searchTerm: string | undefined;
     @observable maxResults: number;
     @observable flightDurationSeconds: number;
@@ -32,16 +33,16 @@ export default class CGSSearchProvider extends SearchProvider{
         this.terria = options.terria;
         this.name = "Locations"
         this.url = defaultValue(options.url, "/search/");
-        this.key = options.key;
+        this.auth = options.auth;
         this.searchTerm = options.searchTerm;
         this.maxResults = 5
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
 
-        if (!this.key) {
+        if (!this.auth) {
             console.warn("The " + this.name + " geocoder will always return no results because the CGS Search API Key has not been configured.");
         }
     }
-    protected doSearch(searchText: string, searchResults: SearchProviderResults): Promise<void> {
+    protected doSearch(searchText: string, searchResults: SearchProviderResults): Promise<any> {
         searchResults.results.length = 0;
         searchResults.message = undefined;
 
@@ -51,8 +52,7 @@ export default class CGSSearchProvider extends SearchProvider{
 
         const promise: Promise<any> = loadJsonp(
             new Resource({
-                url: this.url + "api/v1/locations/search?query=" + this.searchTerm + "&limit=" + this.maxResults,
-                queryParameters: {query: searchText, key: this.key}
+                url: this.url + "api/v1/locations/search" + this.searchTerm + "&limit=" + this.maxResults,
             }),
             "jsonp"
           );
