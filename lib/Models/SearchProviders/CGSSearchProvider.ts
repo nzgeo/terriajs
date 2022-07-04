@@ -1,12 +1,12 @@
 import { observable, runInAction } from "mobx";
 import defaultValue from "terriajs-cesium/Source/Core/defaultValue";
-import defined from "terriajs-cesium/Source/Core/defined";
+// import defined from "terriajs-cesium/Source/Core/defined";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
-import Resource from "terriajs-cesium/Source/Core/Resource";
-import loadJsonp from "../../Core/loadJsonp";
-// import loadWithXhr from "../../Core/loadWithXhr";
+// import Resource from "terriajs-cesium/Source/Core/Resource";
+// import loadJsonp from "../../Core/loadJsonp";
+import loadWithXhr from "../../Core/loadWithXhr";
 import SearchProvider from "./SearchProvider";
-import SearchResult from "./SearchResult";
+// import SearchResult from "./SearchResult";
 import Terria from "../Terria";
 import SearchProviderResults from "./SearchProviderResults";
 
@@ -22,7 +22,7 @@ import SearchProviderResults from "./SearchProviderResults";
 export default class CGSSearchProvider extends SearchProvider{
     readonly terria: Terria;
     @observable url: string;
-    @observable auth: string | undefined;
+    @observable auth: any;
     @observable searchTerm: string | undefined;
     @observable maxResults: number;
     @observable flightDurationSeconds: number;
@@ -50,15 +50,15 @@ export default class CGSSearchProvider extends SearchProvider{
             return Promise.resolve();
         }
 
-        const promise: Promise<any> = loadJsonp(
-            new Resource({
-                url: this.url + "api/v1/locations/search" + this.searchTerm + "&limit=" + this.maxResults,
-            }),
-            "jsonp"
-          );
-        
+        const promise: Promise<any> = loadWithXhr ({
+            url: "/search/api/v1/locations/search?query=" + this.searchTerm + "&limit=" + this.maxResults,
+            method: "GET",
+            headers: { "Authorization": this.auth },
+            responseType: "json"
+        });
+
         return promise
-            .then (result => {
+            .then( result => {
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
@@ -67,7 +67,7 @@ export default class CGSSearchProvider extends SearchProvider{
                     searchResults.message = ("WARNING: result resourceSet length === 0");
                     return;
                 }
-          
+        
                 let resourceSet = result.resourceSets[0];
                 if (resourceSet.resources.length === 0) {
                     searchResults.message = ("WARNING: result resourceSet resources length === 0");
@@ -75,24 +75,30 @@ export default class CGSSearchProvider extends SearchProvider{
                 }
 
                 const list: any[] = [];
+                
 
-                for (let i = 0; i < resourceSet.resources.length; ++i) {
-                    const resource = resourceSet.resources[i];
-                    let name = resource.name;
-                    if (!defined(name)) {
-                      continue;
-                    }
-                    list.push(
-                        new SearchResult({
-                          name: name,
-                          clickAction: createZoomToFunction(this, resource),
-                          location: {
-                            latitude: resource.point.coordinates[0],
-                            longitude: resource.point.coordinates[1]
-                          }
-                        })
-                    );
+                for (let i = 0; i < resourceSet.resources.length; i++) {
+                    var name = resourceSet.resources[i];
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        var response = JSON.parse(xhttp.responseText)
+                        let result : {};
+                        result = {
+                            name: name,
+                            location: {
+                            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
+                            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+                        }};
+                        list.push(result);
+                        }
+                    };
+                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+                    xhttp.setRequestHeader("Authorization", this.auth);
+                    xhttp.send();
                 }
+
                 runInAction(() => {
                     searchResults.results.push(...list);
                 });
