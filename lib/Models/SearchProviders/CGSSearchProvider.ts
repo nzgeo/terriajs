@@ -4,7 +4,6 @@ import defined from "terriajs-cesium/Source/Core/defined";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
 import Resource from "terriajs-cesium/Source/Core/Resource";
 import loadJsonp from "../../Core/loadJsonp";
-// import loadWithXhr from "../../Core/loadWithXhr";
 import SearchProvider from "./SearchProvider";
 import SearchResult from "./SearchResult";
 import Terria from "../Terria";
@@ -42,7 +41,7 @@ export default class CGSSearchProvider extends SearchProvider{
             console.warn("The " + this.name + " geocoder will always return no results because the CGS Search API Key has not been configured.");
         }
     }
-    protected doSearch(searchText: string, searchResults: SearchProviderResults): Promise<any> {
+    protected doSearch(searchText: string, searchResults: SearchProviderResults): Promise<void> {
         searchResults.results.length = 0;
         searchResults.message = undefined;
 
@@ -52,11 +51,11 @@ export default class CGSSearchProvider extends SearchProvider{
 
         const promise: Promise<any> = loadJsonp(
             new Resource({
-                url: this.url + "api/v1/locations/search" + this.searchTerm + "&limit=" + this.maxResults,
-            }),
-            "jsonp"
+                url: this.url + "api/v1/locations/search", 
+                queryParameters: {query: searchText, limit: this.maxResults, key: this.auth}
+            })
           );
-        
+
         return promise
             .then (result => {
                 if (searchResults.isCanceled) {
@@ -67,7 +66,7 @@ export default class CGSSearchProvider extends SearchProvider{
                     searchResults.message = ("WARNING: result resourceSet length === 0");
                     return;
                 }
-          
+
                 let resourceSet = result.resourceSets[0];
                 if (resourceSet.resources.length === 0) {
                     searchResults.message = ("WARNING: result resourceSet resources length === 0");
@@ -96,7 +95,7 @@ export default class CGSSearchProvider extends SearchProvider{
                 runInAction(() => {
                     searchResults.results.push(...list);
                 });
-          
+
                 if (searchResults.results.length === 0) {
                     searchResults.message = "WARNING: searchResults === 0";
                 }
