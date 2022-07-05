@@ -97,13 +97,6 @@ export default class CGSSearchProvider extends SearchProvider{
                     // xhttp.setRequestHeader("Authorization", APIKEY);
                     // xhttp.send();
                 }
-                // runInAction(() => {
-                //     searchResults.results.push(...results);
-                //     });
-          
-                //     if (searchResults.results.length === 0) {
-                //         searchResults.message = "viewModels.searchNoLocations";
-                //     }
                 })
                 .catch(() => {
                   if (searchResults.isCanceled) {
