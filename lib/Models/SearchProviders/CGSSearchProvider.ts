@@ -93,17 +93,17 @@ export default class CGSSearchProvider extends SearchProvider{
                             );
                         }
                     };
-                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-                    xhttp.setRequestHeader("Authorization", APIKEY);
-                    xhttp.send();
+                    // xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+                    // xhttp.setRequestHeader("Authorization", APIKEY);
+                    // xhttp.send();
                 }
-                runInAction(() => {
-                    searchResults.results.push(...results);
-                  });
+                // runInAction(() => {
+                //     searchResults.results.push(...results);
+                //     });
           
-                  if (searchResults.results.length === 0) {
-                    searchResults.message = "viewModels.searchNoLocations";
-                  }
+                //     if (searchResults.results.length === 0) {
+                //         searchResults.message = "viewModels.searchNoLocations";
+                //     }
                 })
                 .catch(() => {
                   if (searchResults.isCanceled) {
