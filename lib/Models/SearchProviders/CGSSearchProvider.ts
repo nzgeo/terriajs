@@ -36,7 +36,7 @@ export default class CGSSearchProvider extends SearchProvider{
         this.name = "Locations"
         this.url = defaultValue(options.url, "/search/");
         this.auth = APIKEY
-        this.maxResults = 5
+        this.maxResults = 10
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
 
         if (!this.auth) {
@@ -78,28 +78,55 @@ export default class CGSSearchProvider extends SearchProvider{
                     let xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
-                            let response = JSON.parse(xhttp.responseText)
+                            // let response = JSON.parse(xhttp.responseText)
                             let result = {
                                 name: name,
                                 isImportant: true,
-                                location: {
-                                    longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-                                    latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-                                }
+                                // clickAction: createZoomToFunction(options.terria, )
+                                // location: {
+                                //     longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
+                                //     latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+                                // }
                             };
                             results.push(
                                 new SearchResult(result)
-                            )
+                            );
                         }
                     };
                     xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
                     xhttp.setRequestHeader("Authorization", APIKEY);
                     xhttp.send();
                 }
-            });
+                runInAction(() => {
+                    searchResults.results.push(...results);
+                  });
+          
+                  if (searchResults.results.length === 0) {
+                    searchResults.message = "viewModels.searchNoLocations";
+                  }
+                })
+                .catch(() => {
+                  if (searchResults.isCanceled) {
+                    // A new search has superseded this one, so ignore the result.
+                    return;
+                  }
+          
+                  searchResults.message = "viewModels.searchErrorOccurred";
+                });
+            };
         }
-    }
     
+    // createZoomToFunction(terria, location, duration) {
+    //     var rectangle = zoomRectangleFromPoint(
+    //       location.latitude,
+    //       location.longitude,
+    //       0.01
+    //     );
+      
+    //     return function() {
+    //       terria.currentViewer.zoomTo(rectangle, duration);
+    //     };
+    //   }
 
 
 
