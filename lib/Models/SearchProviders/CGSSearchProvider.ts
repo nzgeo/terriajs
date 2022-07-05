@@ -87,7 +87,9 @@ export default class CGSSearchProvider extends SearchProvider{
                                     latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
                                 }
                             };
-                            results.push(result);
+                            results.push(
+                                new SearchResult(result)
+                            )
                         }
                     };
                     xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
