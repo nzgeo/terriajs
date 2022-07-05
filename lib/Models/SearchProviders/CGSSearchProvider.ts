@@ -8,6 +8,7 @@ import SearchProvider from "./SearchProvider";
 import SearchResult from "./SearchResult";
 import Terria from "../Terria";
 import SearchProviderResults from "./SearchProviderResults";
+import loadWithXhr from "../../Core/loadWithXhr"
 
  interface CGSSearchProviderOptions {
     terria: Terria;
@@ -32,7 +33,7 @@ export default class CGSSearchProvider extends SearchProvider{
         this.terria = options.terria;
         this.name = "Locations"
         this.url = defaultValue(options.url, "/search/");
-        this.auth = options.auth;
+        this.auth = "Api-Key j5SJa2YsiwOjzRPmVCywV"
         this.searchTerm = options.searchTerm;
         this.maxResults = 5
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
