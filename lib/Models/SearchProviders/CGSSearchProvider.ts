@@ -76,34 +76,24 @@ export default class CGSSearchProvider extends SearchProvider{
                 for(let i = 0; i <data.results.length; i++) {
                     let resource = data.results[i]
                     let name = resource.name;
-                    // let xhttp = new XMLHttpRequest();
                     let results = locationResults;
+
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+                    xhttp.setRequestHeader("Authorization", APIKEY);
+                    xhttp.send();
+
+                    let response = JSON.parse(xhttp.responseText)
                     let result = {
                         name: name,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this.terria, name, this.flightDurationSeconds)}
+                        clickAction: createZoomToFunction(this.terria, name, this.flightDurationSeconds),
+                        location: {
+                            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
+                            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+                        }}
                     results.push(
                         new SearchResult(result));
-                    // xhttp.onreadystatechange = function() {
-                    //     if (this.readyState == 4 && this.status == 200) {
-                    //         // let response = JSON.parse(xhttp.responseText)
-                    //         let result = {
-                    //             name: name,
-                    //             isImportant: true,
-                    //             clickAction: createZoomToFunction(terria, name, flight)
-                    //             location: {
-                    //                 longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-                    //                 latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-                    //             }
-                    //         };
-                    //         results.push(
-                    //             new SearchResult(result)
-                    //         );
-                    //     }
-                    // };
-                    // xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-                    // xhttp.setRequestHeader("Authorization", APIKEY);
-                    // xhttp.send();
                 }
                 runInAction(() => {
                     searchResults.results.push(...locationResults)
@@ -120,19 +110,7 @@ export default class CGSSearchProvider extends SearchProvider{
             };
         }
     
-    function createZoomToFunction(terria: Terria, name: string, duration: number) {
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-        xhttp.setRequestHeader("Authorization", APIKEY);
-        xhttp.send();
-        let response = JSON.parse(xhttp.responseText)
-        console.log(response)
-
-        let location = {
-            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-        }
-
+    function createZoomToFunction(terria: Terria, location: any, duration: number) {
         var rectangle = zoomRectangleFromPoint(
           location.latitude,
           location.longitude,
