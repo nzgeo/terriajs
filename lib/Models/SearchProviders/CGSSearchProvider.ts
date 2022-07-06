@@ -71,13 +71,15 @@ export default class CGSSearchProvider extends SearchProvider{
                     return;
                 }
                 
-                let results = [];
+                let locationResults: any[] = [];
+                
                 for(let i = 0; i <data.results.length; i++) {
                     let resource = data.results[i]
                     let name = resource.name;
                     let terria = this.terria
                     let flight = this.flightDurationSeconds
                     let xhttp = new XMLHttpRequest();
+                    let results = locationResults;
                     xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
                             // let response = JSON.parse(xhttp.responseText)
@@ -99,6 +101,9 @@ export default class CGSSearchProvider extends SearchProvider{
                     // xhttp.setRequestHeader("Authorization", APIKEY);
                     // xhttp.send();
                 }
+                runInAction(() => {
+                    searchResults.results.push(...locationResults)
+                });
                 })
                 .catch(() => {
                   if (searchResults.isCanceled) {
