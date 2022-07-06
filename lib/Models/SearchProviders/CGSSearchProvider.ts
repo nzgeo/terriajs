@@ -83,15 +83,13 @@ export default class CGSSearchProvider extends SearchProvider{
                     xhttp.setRequestHeader("Authorization", APIKEY);
                     xhttp.send();
 
-                    let response = JSON.parse(xhttp.responseText)
+                    let geometryResponse = JSON.parse(xhttp.responseText)
+
                     let result = {
                         name: name,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this.terria, name, this.flightDurationSeconds),
-                        location: {
-                            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-                            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-                        }}
+                        clickAction: createZoomToFunction(this, geometryResponse)
+                    }
                     results.push(
                         new SearchResult(result));
                 }
@@ -109,18 +107,33 @@ export default class CGSSearchProvider extends SearchProvider{
                 });
             };
         }
-    
-    function createZoomToFunction(terria: Terria, location: any, duration: number) {
-        var rectangle = zoomRectangleFromPoint(
-          location.latitude,
-          location.longitude,
-          0.01
-        );
+
+        // function geometryApiRequest(geometry: any) {
+            
+        // }
+
+        function createZoomToFunction(model: CGSSearchProvider, geometry: any) {
+            const [west, south, east, north] = geometry.geojson.bbox;
+            const rectangle = Rectangle.fromDegrees(west, south, east, north);
+            console.log("zoomRectangle called")
+            return function() {
+                console.log("zoomRectangle returned")
+                const terria = model.terria;
+                terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
+            };
+          }
+          
+    // function createZoomToFunction(terria: Terria, location: any, duration: number) {
+    //     var rectangle = zoomRectangleFromPoint(
+    //       location.latitude,
+    //       location.longitude,
+    //       0.01
+    //     );
       
-        return function() {
-          terria.currentViewer.zoomTo(rectangle, duration);
-        };
-      }
+    //     return function() {
+    //       terria.currentViewer.zoomTo(rectangle, duration);
+    //     };
+    //   }
 
 
 
