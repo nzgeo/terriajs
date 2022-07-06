@@ -113,7 +113,7 @@ export default class CGSSearchProvider extends SearchProvider{
         // }
 
         function createZoomToFunction(model: CGSSearchProvider, geometry: any) {
-            const [west, south, east, north] = geometry.geojson.bbox;
+            const [south, west, north, east] = geometry.geojson.bbox;
             const rectangle = Rectangle.fromDegrees(west, south, east, north);
             console.log("zoomRectangle called")
             return function() {
