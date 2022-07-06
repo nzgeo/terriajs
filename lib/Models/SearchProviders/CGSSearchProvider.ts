@@ -126,6 +126,7 @@ export default class CGSSearchProvider extends SearchProvider{
         xhttp.setRequestHeader("Authorization", APIKEY);
         xhttp.send();
         let response = JSON.parse(xhttp.responseText)
+        console.log(response)
 
         let location = {
             longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
