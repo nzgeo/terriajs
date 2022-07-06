@@ -77,10 +77,11 @@ export default class CGSSearchProvider extends SearchProvider{
                     let resource = data.results[i]
                     let name = resource.name;
                     let results = locationResults;
+                    let location = geometryApiRequest(name)
                     let result = {
                         name: name,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this, name)
+                        clickAction: createZoomToFunction(this, location)
                     };
                     results.push(
                         new SearchResult(result));
@@ -115,14 +116,13 @@ export default class CGSSearchProvider extends SearchProvider{
     }
 
           
-    function createZoomToFunction(model: CGSSearchProvider, name: string) {
+    function createZoomToFunction(model: CGSSearchProvider, location: any) {
+        let rectangle = zoomRectangleFromPoint(
+            location.latitude,
+            location.longitude,
+            0.01
+        );
         return function() {
-            let location = geometryApiRequest(name)
-            let rectangle = zoomRectangleFromPoint(
-                location.latitude,
-                location.longitude,
-                0.01
-            );
             const terria = model.terria;
             terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
         };
