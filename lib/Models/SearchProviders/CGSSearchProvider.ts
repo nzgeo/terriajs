@@ -23,7 +23,7 @@ let APIKEY =  "Api-Key j5SJa2YsiwOjzRPmVCywV"
 }
 
 export default class CGSSearchProvider extends SearchProvider{
-    readonly terria: Terria;
+    @observable terria: Terria;
     @observable url: string;
     @observable auth: string | undefined;
     @observable maxResults: number;
@@ -75,6 +75,8 @@ export default class CGSSearchProvider extends SearchProvider{
                 for(let i = 0; i <data.results.length; i++) {
                     let resource = data.results[i]
                     let name = resource.name;
+                    let terria = this.terria
+                    let flight = this.flightDurationSeconds
                     let xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
@@ -82,7 +84,7 @@ export default class CGSSearchProvider extends SearchProvider{
                             let result = {
                                 name: name,
                                 isImportant: true,
-                                // clickAction: createZoomToFunction(options.terria, )
+                                clickAction: createZoomToFunction(terria, name, flight)
                                 // location: {
                                 //     longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
                                 //     latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
@@ -109,17 +111,28 @@ export default class CGSSearchProvider extends SearchProvider{
             };
         }
     
-    // createZoomToFunction(terria, location, duration) {
-    //     var rectangle = zoomRectangleFromPoint(
-    //       location.latitude,
-    //       location.longitude,
-    //       0.01
-    //     );
+    function createZoomToFunction(terria: Terria, name: string, duration: number) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+        xhttp.setRequestHeader("Authorization", APIKEY);
+        xhttp.send();
+        let response = JSON.parse(xhttp.responseText)
+
+        let location = {
+            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
+            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+        }
+
+        var rectangle = zoomRectangleFromPoint(
+          location.latitude,
+          location.longitude,
+          0.01
+        );
       
-    //     return function() {
-    //       terria.currentViewer.zoomTo(rectangle, duration);
-    //     };
-    //   }
+        return function() {
+          terria.currentViewer.zoomTo(rectangle, duration);
+        };
+      }
 
 
 
