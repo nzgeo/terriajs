@@ -77,20 +77,22 @@ export default class CGSSearchProvider extends SearchProvider{
                     let resource = data.results[i]
                     let name = resource.name;
                     let results = locationResults;
+
                     let xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+                    xhttp.setRequestHeader("Authorization", APIKEY);
+                    xhttp.send();
                     let response = JSON.parse(xhttp.responseText)
+
                     let result = {
                         name: name,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this, location),
+                        clickAction: createZoomToFunction(this, name),
                         location: {
                             longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
                             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
                         }
                     };
-                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-                    xhttp.setRequestHeader("Authorization", APIKEY);
-                    xhttp.send();
                     results.push(
                         new SearchResult(result));
                 }
@@ -109,19 +111,19 @@ export default class CGSSearchProvider extends SearchProvider{
             };
         }
 
-    function geometryApiRequest(name: string) {
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-        xhttp.setRequestHeader("Authorization", APIKEY);
-        xhttp.send();
+    // function geometryApiRequest(name: string) {
+    //     let xhttp = new XMLHttpRequest();
+    //     xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+    //     xhttp.setRequestHeader("Authorization", APIKEY);
+    //     xhttp.send();
 
-        let response = JSON.parse(xhttp.responseText)
-        let location = {
-            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-        }
-        return location
-    }
+    //     let response = JSON.parse(xhttp.responseText)
+    //     let location = {
+    //         longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
+    //         latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+    //     }
+    //     return location
+    // }
 
           
     function createZoomToFunction(model: CGSSearchProvider, location: any) {
