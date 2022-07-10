@@ -99,6 +99,7 @@ export default class CGSSearchProvider extends SearchProvider{
                             east: response.geojson.bbox[3]
                         }
                     };
+                    console.log("south " + response.geojson.bbox[0] + " west " + response.geojson.bbox[1]  + " north " +  response.geojson.bbox[2]  + " east " +  response.geojson.bbox[4])
                     results.push(
                         new SearchResult(result));
                 }
@@ -133,15 +134,14 @@ export default class CGSSearchProvider extends SearchProvider{
 
           
     function createZoomToFunction(model: CGSSearchProvider, location: any) {
-        console.log("south " + location.bbox.south + " west " + location.bbox.west  + " north " +  location.bbox.north  + " east " +  location.bbox.east)
-        const [south, west, north, east] = [location.bbox.south, location.bbox.west, location.bbox.north, location.bbox.east];
-        const rectangle = Rectangle.fromDegrees(west, south, east, north);
+        // const [south, west, north, east] = [location.bbox.south, location.bbox.west, location.bbox.north, location.bbox.east];
+        // const rectangle = Rectangle.fromDegrees(west, south, east, north);
         
-        // let rectangle = zoomRectangleFromPoint(
-        //     location.latitude,
-        //     location.longitude,
-        //     0.01
-        // );
+        let rectangle = zoomRectangleFromPoint(
+            location.latitude,
+            location.longitude,
+            0.01
+        );
         return function() {
             // let location = geometryApiRequest(name)
             // let rectangle = zoomRectangleFromPoint(
