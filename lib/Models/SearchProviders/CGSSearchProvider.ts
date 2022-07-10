@@ -133,7 +133,7 @@ export default class CGSSearchProvider extends SearchProvider{
 
           
     function createZoomToFunction(model: CGSSearchProvider, location: any) {
-        const [south, west, north, east] = location.bbox;
+        const [south, west, north, east] = [location.bbox.south, location.bbox.west, location.bbox.north, location.bbox.east];
         const rectangle = Rectangle.fromDegrees(west, south, east, north);
         
         // let rectangle = zoomRectangleFromPoint(
