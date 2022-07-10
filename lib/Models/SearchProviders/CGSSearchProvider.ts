@@ -93,10 +93,10 @@ export default class CGSSearchProvider extends SearchProvider{
                             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
                         },
                         bbox: {
-                            south: response.geojson.bbox[0],
-                            west: response.geojson.bbox[1],
-                            north: response.geojson.bbox[2],
-                            east: response.geojson.bbox[3]
+                            west: response.geojson.bbox[0],
+                            south: response.geojson.bbox[1],
+                            east: response.geojson.bbox[2],
+                            north: response.geojson.bbox[3]
                         }
                     };
                     console.log("south " + response.geojson.bbox[0] + " west " + response.geojson.bbox[1]  + " north " +  response.geojson.bbox[2]  + " east " +  response.geojson.bbox[4])
@@ -134,14 +134,14 @@ export default class CGSSearchProvider extends SearchProvider{
 
           
     function createZoomToFunction(model: CGSSearchProvider, location: any) {
-        // const [south, west, north, east] = [location.bbox.south, location.bbox.west, location.bbox.north, location.bbox.east];
-        // const rectangle = Rectangle.fromDegrees(west, south, east, north);
+        const [south, west, north, east] = [location.bbox.south, location.bbox.west, location.bbox.north, location.bbox.east];
+        const rectangle = Rectangle.fromDegrees(west, south, east, north);
         
-        let rectangle = zoomRectangleFromPoint(
-            location.latitude,
-            location.longitude,
-            0.01
-        );
+        // let rectangle = zoomRectangleFromPoint(
+        //     location.latitude,
+        //     location.longitude,
+        //     0.01
+        // );
         return function() {
             // let location = geometryApiRequest(name)
             // let rectangle = zoomRectangleFromPoint(
