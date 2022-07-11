@@ -160,15 +160,12 @@ export default class MouseCoords {
     }
   }
 
-  updateZoomFromLeaflet(terria: Terria) {
-    if (!terria.leaflet) {
-      return;
-    }
-
-    this.level = terria.leaflet.map.getZoom();
-    console.log("updateZoomFromLeaflet")
-    console.log(this.level)
-  }
+  // updateZoomFromLeaflet(terria: Terria, getZoom: number) {
+  //   if (!terria.leaflet) {
+  //     return;
+  //   }
+  //   this.level = getZoom;
+  // }
 
   updateCoordinatesFromLeaflet(terria: Terria, mouseMoveEvent: MouseEvent) {
     if (!terria.leaflet) {
