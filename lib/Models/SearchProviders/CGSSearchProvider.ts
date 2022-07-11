@@ -87,14 +87,14 @@ export default class CGSSearchProvider extends SearchProvider{
                     let result = {
                         name: name,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this, name),
+                        clickAction: createZoomToFunction(this, response.geojson),
                         location: {
                             longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
                             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
                         }
                     };
-                    console.log("location lat: " + result.location.latitude + "location long: " + result.location.longitude)
-                    console.log("geometry bbox: " + response.bbox)
+                    console.log("location lat: " + result.location.latitude + " location long: " + result.location.longitude)
+                    console.log("geometry bbox: " + response.geojson.bbox)
                     results.push(
                         new SearchResult(result));
                 }
@@ -128,12 +128,15 @@ export default class CGSSearchProvider extends SearchProvider{
     // }
 
           
-    function createZoomToFunction(model: CGSSearchProvider, location: any) {      
-        let rectangle = zoomRectangleFromPoint(
-            location.latitude,
-            location.longitude,
-            0.01
-        );
+    function createZoomToFunction(model: CGSSearchProvider, location: any) {
+        const [west, south, east, north] = location.bbox;
+        const rectangle = Rectangle.fromDegrees(west, south, east, north);
+        
+        // let rectangle = zoomRectangleFromPoint(
+        //     location.latitude,
+        //     location.longitude,
+        //     0.01
+        // );
         return function() {
             const terria = model.terria;
             terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
