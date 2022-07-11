@@ -30,7 +30,8 @@ export default class CGSSearchProvider extends SearchProvider{
 
         this.terria = options.terria;
         this.name = "Locations"
-        this.url = defaultValue(options.url, "/search/");
+        // this.url = defaultValue(options.url, "/search/");
+        this.url = ("http://192.168.201.8:5000/"); // connors new search api dev instance
         this.auth = APIKEY
         this.maxResults = 10
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
@@ -49,9 +50,10 @@ export default class CGSSearchProvider extends SearchProvider{
         }
 
         const promise: Promise<any> = loadWithXhr({
-            url: "/search/api/v1/locations/search?query=" + searchText + "&limit=" + this.maxResults,
+            // url: "/search/api/v1/locations/search?query=" + searchText + "&limit=" + this.maxResults,
+            url: "/api/v1/search/places/search?place=" + searchText + "&limit=" + this.maxResults,
             method: "GET",
-            headers: { "Authorization": this.auth },
+            // headers: { "Authorization": this.auth },
             responseType: "json"
         });
 
@@ -75,8 +77,9 @@ export default class CGSSearchProvider extends SearchProvider{
                     let results = locationResults;
 
                     let xhttp = new XMLHttpRequest();
-                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-                    xhttp.setRequestHeader("Authorization", APIKEY);
+                    // xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
+                    xhttp.open("GET", "/api/v1/search/locations/geometry?place=" + name, false);
+                    // xhttp.setRequestHeader("Authorization", APIKEY);
                     xhttp.send();
                     let response = JSON.parse(xhttp.responseText)
 
