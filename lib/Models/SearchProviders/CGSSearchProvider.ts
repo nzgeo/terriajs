@@ -1,15 +1,11 @@
 import { observable, runInAction } from "mobx";
 import defaultValue from "terriajs-cesium/Source/Core/defaultValue";
-import defined from "terriajs-cesium/Source/Core/defined";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
-import Resource from "terriajs-cesium/Source/Core/Resource";
-import loadJsonp from "../../Core/loadJsonp";
 import SearchProvider from "./SearchProvider";
 import SearchResult from "./SearchResult";
 import Terria from "../Terria";
 import SearchProviderResults from "./SearchProviderResults";
 import loadWithXhr from "../../Core/loadWithXhr"
-import zoomRectangleFromPoint from "../../Map/Vector/zoomRectangleFromPoint"
 
 let APIKEY =  "Api-Key j5SJa2YsiwOjzRPmVCywV"
 
@@ -93,8 +89,6 @@ export default class CGSSearchProvider extends SearchProvider{
                             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
                         }
                     };
-                    console.log("location lat: " + result.location.latitude + " location long: " + result.location.longitude)
-                    console.log("geometry bbox: " + response.geojson.bbox)
                     results.push(
                         new SearchResult(result));
                 }
@@ -112,31 +106,10 @@ export default class CGSSearchProvider extends SearchProvider{
                 });
             };
         }
-
-    // function geometryApiRequest(name: string) {
-    //     let xhttp = new XMLHttpRequest();
-    //     xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-    //     xhttp.setRequestHeader("Authorization", APIKEY);
-    //     xhttp.send();
-
-    //     let response = JSON.parse(xhttp.responseText)
-    //     let location = {
-    //         longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-    //         latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-    //     }
-    //     return location
-    // }
-
           
     function createZoomToFunction(model: CGSSearchProvider, location: any) {
         const [west, south, east, north] = location.bbox;
         const rectangle = Rectangle.fromDegrees(west, south, east, north);
-        
-        // let rectangle = zoomRectangleFromPoint(
-        //     location.latitude,
-        //     location.longitude,
-        //     0.01
-        // );
         return function() {
             const terria = model.terria;
             terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
