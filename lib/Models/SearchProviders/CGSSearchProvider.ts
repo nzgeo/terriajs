@@ -11,7 +11,6 @@ import loadWithXhr from "../../Core/loadWithXhr"
     terria: Terria;
     key?: string;
     url?: string;
-    auth?: string;
     searchTerm?: string;
     maxResults?: number;
     flightDurationSeconds?: number;
@@ -21,7 +20,6 @@ export default class CGSSearchProvider extends SearchProvider{
     @observable terria: Terria;
     @observable key: string | undefined;
     @observable url: string;
-    @observable auth: string | undefined;
     @observable maxResults: number;
     @observable flightDurationSeconds: number;
 
@@ -29,14 +27,13 @@ export default class CGSSearchProvider extends SearchProvider{
         super();
 
         this.terria = options.terria;
-        this.key = options.key
-        this.name = "Locations"
+        this.key = options.key;
         this.url = defaultValue(options.url, "/search/");
-        this.maxResults = 10
+        this.maxResults = 10;
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
 
         if (!this.key) {
-            console.warn("The " + this.name + " geocoder will always return no results because the CGS Search API Key has not been configured.");
+            console.warn("The geocoder will always return no results because the CGS Search API Key has not been configured.");
         }
     }
 
@@ -63,14 +60,14 @@ export default class CGSSearchProvider extends SearchProvider{
                 }
         
                 if (data.results.length === 0) {
-                    searchResults.message = "viewModels.searchNoLocations";
+                    searchResults.message = "Sorry, no locations match your search query.";
                     return;
                 }
                 
                 let locationResults: any[] = [];
 
                 for(let i = 0; i <data.results.length; i++) {
-                    let resource = data.results[i]
+                    let resource = data.results[i];
                     let name = resource.name;
                     let results = locationResults;
 
@@ -78,7 +75,7 @@ export default class CGSSearchProvider extends SearchProvider{
                     xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
                     xhttp.setRequestHeader("Authorization", String(this.key));
                     xhttp.send();
-                    let response = JSON.parse(xhttp.responseText)
+                    let response = JSON.parse(xhttp.responseText);
 
                     let result = {
                         name: name,
@@ -95,26 +92,26 @@ export default class CGSSearchProvider extends SearchProvider{
                 runInAction(() => {
                     searchResults.results.push(...locationResults)
                 });
-                })
-                .catch(() => {
-                  if (searchResults.isCanceled) {
-                    // A new search has superseded this one, so ignore the result.
+            })
+            .catch(() => {
+                if (searchResults.isCanceled) {
+                // A new search has superseded this one, so ignore the result.
                     return;
-                  }
+                }
+        
+                searchResults.message = "An error occurred while searching.  Please contact your administrator or try again later.";
+            });
+    };
+}
           
-                  searchResults.message = "viewModels.searchErrorOccurred";
-                });
-            };
-        }
-          
-    function createZoomToFunction(model: CGSSearchProvider, location: any) {
-        const [west, south, east, north] = location.bbox;
-        const rectangle = Rectangle.fromDegrees(west, south, east, north);
-        return function() {
-            const terria = model.terria;
-            terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
-        };
-      }
+function createZoomToFunction(model: CGSSearchProvider, location: any) {
+    const [west, south, east, north] = location.bbox;
+    const rectangle = Rectangle.fromDegrees(west, south, east, north);
+    return function() {
+        const terria = model.terria;
+        terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
+    };
+}
 
 
 
