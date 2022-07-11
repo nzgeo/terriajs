@@ -104,8 +104,8 @@ export default class CGSSearchProvider extends SearchProvider{
     };
 }
           
-function createZoomToFunction(model: CGSSearchProvider, location: any) {
-    const [west, south, east, north] = location.bbox;
+function createZoomToFunction(model: CGSSearchProvider, geometryGeoJson: any) {
+    const [west, south, east, north] = geometryGeoJson.bbox;
     const rectangle = Rectangle.fromDegrees(west, south, east, north);
     return function() {
         const terria = model.terria;
