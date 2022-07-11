@@ -7,10 +7,9 @@ import Terria from "../Terria";
 import SearchProviderResults from "./SearchProviderResults";
 import loadWithXhr from "../../Core/loadWithXhr"
 
-let APIKEY =  "Api-Key j5SJa2YsiwOjzRPmVCywV"
-
  interface CGSSearchProviderOptions {
     terria: Terria;
+    key?: string;
     url?: string;
     auth?: string;
     searchTerm?: string;
@@ -20,6 +19,7 @@ let APIKEY =  "Api-Key j5SJa2YsiwOjzRPmVCywV"
 
 export default class CGSSearchProvider extends SearchProvider{
     @observable terria: Terria;
+    @observable key: string | undefined;
     @observable url: string;
     @observable auth: string | undefined;
     @observable maxResults: number;
@@ -29,13 +29,13 @@ export default class CGSSearchProvider extends SearchProvider{
         super();
 
         this.terria = options.terria;
+        this.key = options.key
         this.name = "Locations"
         this.url = defaultValue(options.url, "/search/");
-        this.auth = APIKEY
         this.maxResults = 10
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
 
-        if (!this.auth) {
+        if (!this.key) {
             console.warn("The " + this.name + " geocoder will always return no results because the CGS Search API Key has not been configured.");
         }
     }
@@ -51,7 +51,7 @@ export default class CGSSearchProvider extends SearchProvider{
         const promise: Promise<any> = loadWithXhr({
             url: "/search/api/v1/locations/search?query=" + searchText + "&limit=" + this.maxResults,
             method: "GET",
-            headers: { "Authorization": this.auth },
+            headers: { "Authorization": this.key },
             responseType: "json"
         });
 
@@ -76,7 +76,7 @@ export default class CGSSearchProvider extends SearchProvider{
 
                     let xhttp = new XMLHttpRequest();
                     xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-                    xhttp.setRequestHeader("Authorization", APIKEY);
+                    xhttp.setRequestHeader("Authorization", String(this.key));
                     xhttp.send();
                     let response = JSON.parse(xhttp.responseText)
 
