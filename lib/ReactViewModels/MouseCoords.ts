@@ -160,14 +160,14 @@ export default class MouseCoords {
     }
   }
 
-  updateZoomFromLeaflet(terria: Terria, getZoom: number) {
+  updateZoomFromLeaflet(terria: Terria) {
     if (!terria.leaflet) {
       return;
     }
 
-    this.level = getZoom;
-    // console.log("updateZoomFromLeaflet")
-    // console.log(this.level)
+    this.level = terria.leaflet.map.getZoom();
+    console.log("updateZoomFromLeaflet")
+    console.log(this.level)
   }
 
   updateCoordinatesFromLeaflet(terria: Terria, mouseMoveEvent: MouseEvent) {
