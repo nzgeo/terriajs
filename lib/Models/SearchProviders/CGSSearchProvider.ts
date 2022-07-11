@@ -87,19 +87,12 @@ export default class CGSSearchProvider extends SearchProvider{
                     let result = {
                         name: name,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this, name),
+                        clickAction: createZoomToFunction(this, response.name),
                         location: {
                             longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
                             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-                        },
-                        bbox: {
-                            west: response.geojson.bbox[0],
-                            south: response.geojson.bbox[1],
-                            east: response.geojson.bbox[2],
-                            north: response.geojson.bbox[3]
                         }
                     };
-                    console.log("south " + response.geojson.bbox[0] + " west " + response.geojson.bbox[1]  + " north " +  response.geojson.bbox[2]  + " east " +  response.geojson.bbox[4])
                     results.push(
                         new SearchResult(result));
                 }
@@ -134,7 +127,7 @@ export default class CGSSearchProvider extends SearchProvider{
 
           
     function createZoomToFunction(model: CGSSearchProvider, location: any) {
-        const [south, west, north, east] = [location.bbox.south, location.bbox.west, location.bbox.north, location.bbox.east];
+        const [west, south, east, north] = location.bbox;
         const rectangle = Rectangle.fromDegrees(west, south, east, north);
         
         // let rectangle = zoomRectangleFromPoint(
