@@ -87,8 +87,7 @@ For example, if a point feature on the edge of the extent is drawn as a circle w
       "The maximum level-of-detail supported by the imagery provider, or undefined if there is no limit",
     type: "number"
   })
-  maximumLevel: number = 22;
-  // maximumLevel?: number;
+  maximumLevel?: number;
 
   @primitiveTrait({
     name: "Allow feature picking",
