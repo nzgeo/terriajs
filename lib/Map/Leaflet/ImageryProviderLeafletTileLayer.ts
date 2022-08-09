@@ -52,8 +52,7 @@ export default class ImageryProviderLeafletTileLayer extends L.TileLayer {
     private leaflet: Leaflet,
     readonly imageryProvider: ImageryProvider,
     options: L.TileLayerOptions = {
-      maxZoom: 22,
-      maxNativeZoom: 22
+      maxZoom: 22
     }
   ) {
     super(<any>undefined, {
