@@ -11,7 +11,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       layer: "osm_bright",
       url:
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      opacity: 1.0
+      opacity: 1.0,
+      tileMatrixMaximumLevel: 22
     },
     image: "build/TerriaJS/images/basemap-osm-bright.png",
     contrastColor: "#000000"
@@ -24,7 +25,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       layer: "osm_basic",
       url:
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      opacity: 1.0
+      opacity: 1.0,
+      tileMatrixMaximumLevel: 22
     },
     image: "build/TerriaJS/images/basemap-osm-basic.png",
     contrastColor: "#000000"
@@ -37,7 +39,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       layer: "osm_positron",
       url:
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      opacity: 1.0
+      opacity: 1.0,
+      tileMatrixMaximumLevel: 22
     },
     image: "build/TerriaJS/images/basemap-osm-positron.png",
     contrastColor: "#000000"
@@ -50,7 +53,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       layer: "osm_street",
       url:
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      opacity: 1.0
+      opacity: 1.0,
+      tileMatrixMaximumLevel: 22
     },
     image: "build/TerriaJS/images/basemap-osm-street.png",
     contrastColor: "#000000"
@@ -63,7 +67,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       layer: "osm_terrain",
       url:
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      opacity: 1.0
+      opacity: 1.0,
+      tileMatrixMaximumLevel: 22
     },
     image: "build/TerriaJS/images/basemap-osm-terrain.png",
     contrastColor: "#000000"
@@ -76,7 +81,8 @@ export function defaultBaseMaps(terria: Terria): BaseMapJson[] {
       layer: "imagery_label",
       url:
         "/mapproxy/service?REQUEST=GetCapabilities&SERVICE=WMTS",
-      opacity: 1.0
+      opacity: 1.0,
+      tileMatrixMaximumLevel: 22
     },
     image: "build/TerriaJS/images/basemap-imagery.png",
     contrastColor: "#000000"
