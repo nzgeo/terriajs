@@ -104,7 +104,8 @@ export default class Leaflet extends GlobeOrMap {
     clippingRectangle: Rectangle | undefined
   ) => GridLayer = computedFn((ip, clippingRectangle) => {
     const layerOptions = {
-      bounds: clippingRectangle && rectangleToLatLngBounds(clippingRectangle)
+      bounds: clippingRectangle && rectangleToLatLngBounds(clippingRectangle),
+      maxZoom: 22
     };
     // We have two different kinds of ImageryProviderLeaflet layers
     // - Grid layer will use the ImageryProvider in the more traditional way - calling `requestImage` to draw the image on to a canvas
