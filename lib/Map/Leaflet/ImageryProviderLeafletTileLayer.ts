@@ -51,7 +51,8 @@ export default class ImageryProviderLeafletTileLayer extends L.TileLayer {
   constructor(
     private leaflet: Leaflet,
     readonly imageryProvider: ImageryProvider,
-    options: L.TileLayerOptions = {}
+    options: L.TileLayerOptions = {
+    }
   ) {
     super(<any>undefined, {
       ...options,

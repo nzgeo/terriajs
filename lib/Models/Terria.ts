@@ -560,7 +560,7 @@ export default class Terria {
    * Gets or sets whether to use the device's native resolution (sets cesium.viewer.resolutionScale to a ratio of devicePixelRatio)
    * @type {boolean}
    */
-  @observable useNativeResolution = false;
+  @observable useNativeResolution = true;
 
   /**
    * Whether we think all references in the catalog have been loaded
