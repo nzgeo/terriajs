@@ -7,7 +7,7 @@ import Terria from "../Terria";
 import SearchProviderResults from "./SearchProviderResults";
 import loadWithXhr from "../../Core/loadWithXhr"
 
- interface CGSSearchProviderOptions {
+interface CGSSearchProviderOptions {
     terria: Terria;
     key?: string;
     url?: string;
@@ -16,7 +16,7 @@ import loadWithXhr from "../../Core/loadWithXhr"
     flightDurationSeconds?: number;
 }
 
-export default class CGSSearchProvider extends SearchProvider{
+export default class CGSSearchProvider extends SearchProvider {
     @observable terria: Terria;
     @observable key: string | undefined;
     @observable url: string;
@@ -54,19 +54,20 @@ export default class CGSSearchProvider extends SearchProvider{
 
         return promise
             .then(data => {
+                console.log("Con testing")
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
                 }
-        
+
                 if (data.results.length === 0) {
                     searchResults.message = "Sorry, no locations match your search query.";
                     return;
                 }
-                
+
                 let locationResults: any[] = [];
 
-                for(let i = 0; i <data.results.length; i++) {
+                for (let i = 0; i < data.results.length; i++) {
                     let resource = data.results[i];
                     let name = resource.name;
                     let results = locationResults;
@@ -95,24 +96,20 @@ export default class CGSSearchProvider extends SearchProvider{
             })
             .catch(() => {
                 if (searchResults.isCanceled) {
-                // A new search has superseded this one, so ignore the result.
+                    // A new search has superseded this one, so ignore the result.
                     return;
                 }
-        
+
                 searchResults.message = "An error occurred while searching.  Please contact your administrator or try again later.";
             });
     };
 }
-          
+
 function createZoomToFunction(model: CGSSearchProvider, geometryGeoJson: any) {
     const [west, south, east, north] = geometryGeoJson.bbox;
     const rectangle = Rectangle.fromDegrees(west, south, east, north);
-    return function() {
+    return function () {
         const terria = model.terria;
         terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
     };
 }
-
-
-
-
