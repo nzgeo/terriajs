@@ -54,7 +54,6 @@ export default class CGSSearchProvider extends SearchProvider {
 
         return promise
             .then(data => {
-                console.log("Con testing")
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
@@ -68,6 +67,8 @@ export default class CGSSearchProvider extends SearchProvider {
                 let locationResults: any[] = [];
 
                 for (let i = 0; i < data.results.length; i++) {
+                    console.log("Con testing")
+
                     let resource = data.results[i];
                     let name = resource.name;
                     let results = locationResults;
