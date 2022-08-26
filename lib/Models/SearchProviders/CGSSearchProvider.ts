@@ -65,33 +65,55 @@ export default class CGSSearchProvider extends SearchProvider {
 
                 let locationResults: any[] = [];
 
-                for (let i = 0; i < data.results.length; i++) {
-                    console.log("Search update 1")
-
-                    let resource = data.results[i];
-                    let name = resource.name;
+                for (let place of data) {
                     let results = locationResults;
-
                     let xhttp = new XMLHttpRequest();
-                    xhttp.open("GET", "/search/api/v1/place/geometry?place=" + name, false);
+                    xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
                     xhttp.send();
                     let response = JSON.parse(xhttp.responseText);
 
                     let result = {
-                        name: name,
+                        name: place,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this, response.geojson),
+                        // clickAction: createZoomToFunction(this, response.geojson),
                         location: {
-                            longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-                            latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+                            longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
+                            latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
                         }
                     };
-                    results.push(
-                        new SearchResult(result));
+                    results.push(new SearchResult(result));
                 }
                 runInAction(() => {
                     searchResults.results.push(...locationResults)
                 });
+
+                // for (let i = 0; i < data.results.length; i++) {
+                //     console.log("Search update 1")
+
+                //     let resource = data.results[i];
+                //     let name = resource.name;
+                //     let results = locationResults;
+
+                //     let xhttp = new XMLHttpRequest();
+                //     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + name, false);
+                //     xhttp.send();
+                //     let response = JSON.parse(xhttp.responseText);
+
+                //     let result = {
+                //         name: name,
+                //         isImportant: true,
+                //         // clickAction: createZoomToFunction(this, response.geojson),
+                //         location: {
+                //             longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
+                //             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
+                //         }
+                //     };
+                //     results.push(
+                //         new SearchResult(result));
+                // }
+                // runInAction(() => {
+                //     searchResults.results.push(...locationResults)
+                // });
             })
             .catch(() => {
                 if (searchResults.isCanceled) {
@@ -104,11 +126,11 @@ export default class CGSSearchProvider extends SearchProvider {
     };
 }
 
-function createZoomToFunction(model: CGSSearchProvider, geometryGeoJson: any) {
-    const [west, south, east, north] = geometryGeoJson.bbox;
-    const rectangle = Rectangle.fromDegrees(west, south, east, north);
-    return function () {
-        const terria = model.terria;
-        terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
-    };
-}
+// function createZoomToFunction(model: CGSSearchProvider, geometryGeoJson: any) {
+//     const [west, south, east, north] = geometryGeoJson.bbox;
+//     const rectangle = Rectangle.fromDegrees(west, south, east, north);
+//     return function () {
+//         const terria = model.terria;
+//         terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
+//     };
+// }
