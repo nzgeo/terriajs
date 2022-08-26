@@ -63,6 +63,8 @@ export default class CGSSearchProvider extends SearchProvider {
                     return;
                 }
 
+                console.log("Test 1")
+
                 let locationResults: any[] = [];
 
                 for (let place of data) {
