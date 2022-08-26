@@ -29,7 +29,7 @@ export default class CGSSearchProvider extends SearchProvider {
         this.terria = options.terria;
         this.key = options.key;
         this.url = defaultValue(options.url, "/search/");
-        this.maxResults = 10;
+        this.maxResults = 100;
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
 
         if (!this.key) {
@@ -46,49 +46,48 @@ export default class CGSSearchProvider extends SearchProvider {
         }
 
         const promise: Promise<any> = loadWithXhr({
-            url: "/search/api/v1/places?place=" + searchText + "&limit=" + 1,
+            url: "/search/api/v1/places?place=" + searchText + "&limit=" + 5,
             method: "GET",
             responseType: "json"
         });
 
         return promise
             .then(data => {
-                console.log("Testing")
-                // if (searchResults.isCanceled) {
-                //     // A new search has superseded this one, so ignore the result.
-                //     return;
-                // }
+                console.log("Testing 2")
+                if (searchResults.isCanceled) {
+                    // A new search has superseded this one, so ignore the result.
+                    return;
+                }
 
-                // if (data.results.length === 0) {
-                //     searchResults.message = "Sorry, no locations match your search query.";
-                //     return;
-                // }
+                if (data.results.length === 0) {
+                    searchResults.message = "Sorry, no locations match your search query.";
+                    return;
+                }
 
-                // console.log("Test 1")
+                let locationResults: any[] = [];
 
-                // let locationResults: any[] = [];
+                for (let place of data) {
+                    console.log("Testing 3")
+                    let results = locationResults;
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
+                    xhttp.send();
+                    let response = JSON.parse(xhttp.responseText);
 
-                // for (let place of data) {
-                //     let results = locationResults;
-                //     let xhttp = new XMLHttpRequest();
-                //     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
-                //     xhttp.send();
-                //     let response = JSON.parse(xhttp.responseText);
-
-                //     let result = {
-                //         name: place,
-                //         isImportant: true,
-                //         // clickAction: createZoomToFunction(this, response.geojson),
-                //         location: {
-                //             longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
-                //             latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
-                //         }
-                //     };
-                //     results.push(new SearchResult(result));
-                // }
-                // runInAction(() => {
-                //     searchResults.results.push(...locationResults)
-                // });
+                    let result = {
+                        name: place,
+                        isImportant: true,
+                        // clickAction: createZoomToFunction(this, response.geojson),
+                        // location: {
+                        //     longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
+                        //     latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
+                        // }
+                    };
+                    results.push(new SearchResult(result));
+                }
+                runInAction(() => {
+                    searchResults.results.push(...locationResults)
+                });
 
                 // for (let i = 0; i < data.results.length; i++) {
                 //     console.log("Search update 1")
