@@ -46,7 +46,7 @@ export default class CGSSearchProvider extends SearchProvider {
         }
 
         const promise: Promise<any> = loadWithXhr({
-            url: "/search/api/v1/locations/places?place=" + searchText + "&limit=" + this.maxResults,
+            url: "/search/api/v1/places?place=" + searchText + "&limit=" + this.maxResults,
             method: "GET",
             responseType: "json"
         });
