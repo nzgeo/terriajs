@@ -46,9 +46,8 @@ export default class CGSSearchProvider extends SearchProvider {
         }
 
         const promise: Promise<any> = loadWithXhr({
-            url: "/search/api/v1/locations/search?query=" + searchText + "&limit=" + this.maxResults,
+            url: "/search/api/v1/locations/places?place=" + searchText + "&limit=" + this.maxResults,
             method: "GET",
-            headers: { "Authorization": this.key },
             responseType: "json"
         });
 
@@ -67,15 +66,14 @@ export default class CGSSearchProvider extends SearchProvider {
                 let locationResults: any[] = [];
 
                 for (let i = 0; i < data.results.length; i++) {
-                    console.log("Con testing")
+                    console.log("Search update 1")
 
                     let resource = data.results[i];
                     let name = resource.name;
                     let results = locationResults;
 
                     let xhttp = new XMLHttpRequest();
-                    xhttp.open("GET", "/search/api/v1/locations/geometry?query=" + name, false);
-                    xhttp.setRequestHeader("Authorization", String(this.key));
+                    xhttp.open("GET", "/search/api/v1/place/geometry?place=" + name, false);
                     xhttp.send();
                     let response = JSON.parse(xhttp.responseText);
 
