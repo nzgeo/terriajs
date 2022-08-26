@@ -77,7 +77,7 @@ export default class CGSSearchProvider extends SearchProvider {
                     let result = {
                         name: place,
                         isImportant: true,
-                        // clickAction: createZoomToFunction(this, response.geojson),
+                        clickAction: createZoomToFunction(this, response),
                         location: {
                             longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
                             latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
@@ -100,11 +100,11 @@ export default class CGSSearchProvider extends SearchProvider {
     };
 }
 
-// function createZoomToFunction(model: CGSSearchProvider, geometryGeoJson: any) {
-//     const [west, south, east, north] = geometryGeoJson.bbox;
-//     const rectangle = Rectangle.fromDegrees(west, south, east, north);
-//     return function () {
-//         const terria = model.terria;
-//         terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
-//     };
-// }
+function createZoomToFunction(model: CGSSearchProvider, geometryGeoJson: any) {
+    const [west, south, east, north] = geometryGeoJson.bbox;
+    const rectangle = Rectangle.fromDegrees(west, south, east, north);
+    return function () {
+        const terria = model.terria;
+        terria.currentViewer.zoomTo(rectangle, model.flightDurationSeconds);
+    };
+}
