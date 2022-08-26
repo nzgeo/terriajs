@@ -78,10 +78,10 @@ export default class CGSSearchProvider extends SearchProvider {
                         name: place,
                         isImportant: true,
                         // clickAction: createZoomToFunction(this, response.geojson),
-                        // location: {
-                        //     longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
-                        //     latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
-                        // }
+                        location: {
+                            longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
+                            latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
+                        }
                     };
                     results.push(new SearchResult(result));
                 }
