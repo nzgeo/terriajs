@@ -53,13 +53,13 @@ export default class CGSSearchProvider extends SearchProvider {
 
         return promise
             .then(data => {
-                console.log("Testing 2")
+                console.log("Testing 1")
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
                 }
 
-                if (data.results.length === 0) {
+                if (data.length === 0) {
                     searchResults.message = "Sorry, no locations match your search query.";
                     return;
                 }
@@ -88,34 +88,6 @@ export default class CGSSearchProvider extends SearchProvider {
                 runInAction(() => {
                     searchResults.results.push(...locationResults)
                 });
-
-                // for (let i = 0; i < data.results.length; i++) {
-                //     console.log("Search update 1")
-
-                //     let resource = data.results[i];
-                //     let name = resource.name;
-                //     let results = locationResults;
-
-                //     let xhttp = new XMLHttpRequest();
-                //     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + name, false);
-                //     xhttp.send();
-                //     let response = JSON.parse(xhttp.responseText);
-
-                //     let result = {
-                //         name: name,
-                //         isImportant: true,
-                //         // clickAction: createZoomToFunction(this, response.geojson),
-                //         location: {
-                //             longitude: response.geojson.bbox[2] - Math.abs(response.geojson.bbox[2] - response.geojson.bbox[0]) / 2,
-                //             latitude: response.geojson.bbox[3] - Math.abs(response.geojson.bbox[3] - response.geojson.bbox[1]) / 2
-                //         }
-                //     };
-                //     results.push(
-                //         new SearchResult(result));
-                // }
-                // runInAction(() => {
-                //     searchResults.results.push(...locationResults)
-                // });
             })
             .catch(() => {
                 if (searchResults.isCanceled) {
