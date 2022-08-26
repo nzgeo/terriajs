@@ -46,48 +46,49 @@ export default class CGSSearchProvider extends SearchProvider {
         }
 
         const promise: Promise<any> = loadWithXhr({
-            url: "/search/api/v1/places?place=" + searchText + "&limit=" + this.maxResults,
+            url: "/search/api/v1/places?place=" + searchText + "&limit=" + 1,
             method: "GET",
             responseType: "json"
         });
 
         return promise
             .then(data => {
-                if (searchResults.isCanceled) {
-                    // A new search has superseded this one, so ignore the result.
-                    return;
-                }
+                console.log("Testing")
+                // if (searchResults.isCanceled) {
+                //     // A new search has superseded this one, so ignore the result.
+                //     return;
+                // }
 
-                if (data.results.length === 0) {
-                    searchResults.message = "Sorry, no locations match your search query.";
-                    return;
-                }
+                // if (data.results.length === 0) {
+                //     searchResults.message = "Sorry, no locations match your search query.";
+                //     return;
+                // }
 
-                console.log("Test 1")
+                // console.log("Test 1")
 
-                let locationResults: any[] = [];
+                // let locationResults: any[] = [];
 
-                for (let place of data) {
-                    let results = locationResults;
-                    let xhttp = new XMLHttpRequest();
-                    xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
-                    xhttp.send();
-                    let response = JSON.parse(xhttp.responseText);
+                // for (let place of data) {
+                //     let results = locationResults;
+                //     let xhttp = new XMLHttpRequest();
+                //     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
+                //     xhttp.send();
+                //     let response = JSON.parse(xhttp.responseText);
 
-                    let result = {
-                        name: place,
-                        isImportant: true,
-                        // clickAction: createZoomToFunction(this, response.geojson),
-                        location: {
-                            longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
-                            latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
-                        }
-                    };
-                    results.push(new SearchResult(result));
-                }
-                runInAction(() => {
-                    searchResults.results.push(...locationResults)
-                });
+                //     let result = {
+                //         name: place,
+                //         isImportant: true,
+                //         // clickAction: createZoomToFunction(this, response.geojson),
+                //         location: {
+                //             longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
+                //             latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
+                //         }
+                //     };
+                //     results.push(new SearchResult(result));
+                // }
+                // runInAction(() => {
+                //     searchResults.results.push(...locationResults)
+                // });
 
                 // for (let i = 0; i < data.results.length; i++) {
                 //     console.log("Search update 1")
