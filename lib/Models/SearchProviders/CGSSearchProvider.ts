@@ -42,7 +42,6 @@ export default class CGSSearchProvider extends SearchProvider {
         searchResults.message = undefined;
 
         if (searchText == undefined || /^\s*$/.test(searchText)) {
-            console.log("if 1")
             return Promise.resolve();
         }
 
