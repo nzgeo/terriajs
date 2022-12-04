@@ -54,7 +54,7 @@ export default class CGSSearchProvider extends SearchProvider {
 
         return promise
             .then(data => {
-                console.log("Testing 1")
+                console.log("Testing A")
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
@@ -68,7 +68,7 @@ export default class CGSSearchProvider extends SearchProvider {
                 let locationResults: any[] = [];
 
                 for (let place of data) {
-                    console.log("Testing 3")
+                    console.log("Testing B")
                     let results = locationResults;
                     let xhttp = new XMLHttpRequest();
                     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
