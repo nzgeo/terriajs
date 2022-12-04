@@ -29,7 +29,7 @@ export default class CGSSearchProvider extends SearchProvider {
         this.terria = options.terria;
         this.key = options.key;
         this.url = defaultValue(options.url, "/search/");
-        this.maxResults = 100;
+        this.maxResults = 200;
         this.flightDurationSeconds = defaultValue(options.flightDurationSeconds, 1.5);
 
         if (!this.key) {
@@ -42,6 +42,7 @@ export default class CGSSearchProvider extends SearchProvider {
         searchResults.message = undefined;
 
         if (searchText == undefined || /^\s*$/.test(searchText)) {
+            console.log("if 1")
             return Promise.resolve();
         }
 
@@ -73,28 +74,30 @@ export default class CGSSearchProvider extends SearchProvider {
                     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
                     xhttp.send();
                     let response = JSON.parse(xhttp.responseText);
-
-                    let result = {
+                    for (let geoStruct of response) {
+                        let result = {
                         name: place,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this, response),
+                        clickAction: createZoomToFunction(this, geoStruct),
                         location: {
-                            longitude: response.bbox[2] - Math.abs(response.bbox[2] - response.bbox[0]) / 2,
-                            latitude: response.bbox[3] - Math.abs(response.bbox[3] - response.bbox[1]) / 2
+                            longitude: geoStruct.bbox[2] - Math.abs(geoStruct.bbox[2] - geoStruct.bbox[0]) / 2,
+                            latitude: geoStruct.bbox[3] - Math.abs(geoStruct.bbox[3] - geoStruct.bbox[1]) / 2
                         }
-                    };
-                    results.push(new SearchResult(result));
+                        };
+                        results.push(new SearchResult(result));
+                    }
+
                 }
                 runInAction(() => {
                     searchResults.results.push(...locationResults)
                 });
             })
-            .catch(() => {
+            .catch((error) => {
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
                 }
-
+                console.log(error)
                 searchResults.message = "An error occurred while searching.  Please contact your administrator or try again later.";
             });
     };
