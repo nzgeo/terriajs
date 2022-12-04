@@ -54,7 +54,6 @@ export default class CGSSearchProvider extends SearchProvider {
 
         return promise
             .then(data => {
-                console.log("Testing A")
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
@@ -68,7 +67,6 @@ export default class CGSSearchProvider extends SearchProvider {
                 let locationResults: any[] = [];
 
                 for (let place of data) {
-                    console.log("Testing B")
                     let results = locationResults;
                     let xhttp = new XMLHttpRequest();
                     xhttp.open("GET", "/search/api/v1/place/geometry?place=" + place, false);
@@ -92,12 +90,11 @@ export default class CGSSearchProvider extends SearchProvider {
                     searchResults.results.push(...locationResults)
                 });
             })
-            .catch((error) => {
+            .catch(() => {
                 if (searchResults.isCanceled) {
                     // A new search has superseded this one, so ignore the result.
                     return;
                 }
-                console.log(error)
                 searchResults.message = "An error occurred while searching.  Please contact your administrator or try again later.";
             });
     };
