@@ -107,7 +107,7 @@ export default class Leaflet extends GlobeOrMap {
     clippingRectangle: Rectangle | undefined
   ) => GridLayer = computedFn((ip, clippingRectangle) => {
     const layerOptions = {
-      maxZoom: this.terria.configParameters.leafletMaxZoom,
+      maxZoom: 23,
       bounds: clippingRectangle && rectangleToLatLngBounds(clippingRectangle)
     };
     // We have two different kinds of ImageryProviderLeaflet layers
@@ -154,6 +154,7 @@ export default class Leaflet extends GlobeOrMap {
       zoomControl: false,
       attributionControl: false,
       zoomSnap: 1, // Change to  0.2 for incremental zoom when Chrome fixes canvas scaling gaps
+      maxZoom: 23,
       preferCanvas: true,
       worldCopyJump: false
     }).setView([-28.5, 135], 5);

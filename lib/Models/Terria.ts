@@ -536,7 +536,7 @@ export default class Terria {
     storyEnabled: true,
     interceptBrowserPrint: true,
     tabbedCatalog: false,
-    useCesiumIonTerrain: true,
+    useCesiumIonTerrain: false,
     cesiumTerrainUrl: undefined,
     cesiumTerrainAssetId: undefined,
     cesiumIonAccessToken: undefined,
@@ -545,13 +545,13 @@ export default class Terria {
     cesiumIonLoginTokenPersistence: "page",
     cesiumIonAllowSharingAddedAssets: false,
     bingMapsKey: undefined,
-    hideTerriaLogo: false,
+    hideTerriaLogo: true,
     brandBarElements: undefined,
     brandBarSmallElements: undefined,
     displayOneBrand: 0,
     disableMyLocation: undefined,
     disableSplitter: undefined,
-    disablePedestrianMode: false,
+    disablePedestrianMode: true,
     keepCatalogOpen: false,
     experimentalFeatures: undefined,
     magdaReferenceHeaders: undefined,
@@ -701,7 +701,7 @@ export default class Terria {
    * Gets or sets whether to use the device's native resolution (sets cesium.viewer.resolutionScale to a ratio of devicePixelRatio)
    * @type {boolean}
    */
-  @observable useNativeResolution = false;
+  @observable useNativeResolution = true;
 
   /**
    * Whether we think all references in the catalog have been loaded

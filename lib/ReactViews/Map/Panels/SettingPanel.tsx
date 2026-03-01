@@ -216,12 +216,12 @@ const SettingPanel: FC = observer(() => {
     ? t("settingPanel.terrain.showUndergroundFeatures")
     : t("settingPanel.terrain.hideUndergroundFeatures");
 
-  if (
-    terria.configParameters.useCesiumIonTerrain ||
-    terria.configParameters.cesiumTerrainUrl
-  ) {
-    MapViewers["3d"].available = true;
-  }
+  // if (
+  //   terria.configParameters.useCesiumIonTerrain ||
+  //   terria.configParameters.cesiumTerrainUrl
+  // ) {
+  //   MapViewers["3d"].available = true;
+  // }
 
   const supportsSide = isCesiumWithTerrain;
 
@@ -283,7 +283,7 @@ const SettingPanel: FC = observer(() => {
               <Box paddedVertically={1}>
                 <Text as="label">{t("settingPanel.terrain.sideLabel")}</Text>
               </Box>
-              <FlexGrid gap={1} elementsNo={3}>
+              <FlexGrid gap={1} elementsNo={2}>
                 {Object.values(sides).map((side: any) => (
                   <SettingsButton
                     key={side}
@@ -324,7 +324,7 @@ const SettingPanel: FC = observer(() => {
                 {activeMapName}
               </Text>
             </Box>
-            <FlexGrid gap={1} elementsNo={4}>
+            <FlexGrid gap={1} elementsNo={3}>
               {terria.baseMapsModel.baseMapItems.map((baseMap, i) => (
                 <StyledBasemapButton
                   key={baseMap.item?.uniqueId}

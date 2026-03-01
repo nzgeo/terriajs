@@ -43,7 +43,7 @@ interface ViewerOptions {
 }
 
 const viewerOptionsDefaults: ViewerOptions = {
-  useTerrain: true
+  useTerrain: false
 };
 /**
  * A class that deals with initialising, destroying and switching between viewers

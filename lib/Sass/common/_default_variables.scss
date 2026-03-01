@@ -20,7 +20,7 @@
 @use "sass:meta";
 @use "sass:color";
 
-@import url("https://fonts.googleapis.com/css?family=Inter:300,400,500,400italic,600,700&display=swap");
+// @import url("https://fonts.googleapis.com/css?family=Inter:300,400,500,400italic,600,700&display=swap");
 
 $font-pop: "Inter", sans-serif !default;
 $font-base: "Inter", sans-serif !default;
@@ -167,7 +167,7 @@ $map-button-top: 21px !default;
 $trainer-height: 64px !default;
 $map-button-border-radius: 4px !default;
 $work-bench-width: 350px !default;
-$setting-panel: 300px !default;
+$setting-panel: 200px !default;
 $share-panel-width: 450px !default;
 $share-panel-caret-left: 215px !default;
 $feature-info-panel-width: 500px !default;

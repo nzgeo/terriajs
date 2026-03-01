@@ -50,6 +50,7 @@ export default class MouseCoords {
     Cancelable;
   tileRequestInFlight?: unknown;
 
+  level?: any;
   elevation?: string;
   utmZone?: string;
   latitude?: string;
@@ -98,6 +99,7 @@ export default class MouseCoords {
     const pickedTriangle = isDefined(pickRay)
       ? pickTriangle(pickRay, scene, true, pickedTriangleScratch)
       : undefined;
+    this.level = "N/A";
     if (isDefined(pickedTriangle)) {
       // Get a fast, accurate-ish height every time the mouse moves.
       const ellipsoid = globe.ellipsoid;
@@ -178,6 +180,7 @@ export default class MouseCoords {
     } else {
       runInAction(() => {
         this.elevation = undefined;
+        this.level = undefined;
         this.utmZone = undefined;
         this.latitude = undefined;
         this.longitude = undefined;
@@ -198,6 +201,7 @@ export default class MouseCoords {
     }
 
     const latLng = terria.leaflet.map.mouseEventToLatLng(mouseMoveEvent);
+    this.level = terria.leaflet.map.getZoom();
     const coordinates = Cartographic.fromDegrees(
       latLng.lng,
       latLng.lat,

@@ -31,6 +31,7 @@ export const LocationBar: FC<ILocationBarProps> = observer(
     const theme = useTheme();
     const { t } = useTranslation();
 
+    const levelRef = useRef<HTMLElement>(null);
     const elevationRef = useRef<HTMLElement>(null);
     const longitudeRef = useRef<HTMLElement>(null);
     const latitudeRef = useRef<HTMLElement>(null);
@@ -40,6 +41,7 @@ export const LocationBar: FC<ILocationBarProps> = observer(
 
     useEffect(() => {
       const disposer = mouseCoords.updateEvent.addEventListener(() => {
+        setInnerText(levelRef, mouseCoords.elevation ?? "");
         setInnerText(elevationRef, mouseCoords.elevation ?? "");
         setInnerText(longitudeRef, mouseCoords.longitude ?? "");
         setInnerText(latitudeRef, mouseCoords.latitude ?? "");
@@ -105,6 +107,10 @@ export const LocationBar: FC<ILocationBarProps> = observer(
           <Section>
             <StyledText>{t("legend.elev")}</StyledText>
             <StyledText ref={elevationRef}>{mouseCoords.elevation}</StyledText>
+          </Section>
+          <Section>
+            <StyledText>{t("legend.level")}</StyledText>
+            <StyledText ref={levelRef}>{mouseCoords.level}</StyledText>
           </Section>
         </RawButton>
       </Box>
