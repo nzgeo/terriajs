@@ -34,7 +34,7 @@ describe("TerriaViewer", function () {
     terria.mainViewer.attach(container);
     terriaViewer = terria.mainViewer;
 
-    setViewerMode("3d", terriaViewer);
+    setViewerMode("3dsmooth", terriaViewer);
 
     terriaViewer.beforeViewerChanged.addEventListener(() => {
       mockBeforeViewerChanges();
