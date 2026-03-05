@@ -41,7 +41,7 @@ export const LocationBar: FC<ILocationBarProps> = observer(
 
     useEffect(() => {
       const disposer = mouseCoords.updateEvent.addEventListener(() => {
-        setInnerText(levelRef, mouseCoords.elevation ?? "");
+        setInnerText(levelRef, mouseCoords.level ?? "");
         setInnerText(elevationRef, mouseCoords.elevation ?? "");
         setInnerText(longitudeRef, mouseCoords.longitude ?? "");
         setInnerText(latitudeRef, mouseCoords.latitude ?? "");
