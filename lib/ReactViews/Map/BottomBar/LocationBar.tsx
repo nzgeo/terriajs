@@ -109,7 +109,7 @@ export const LocationBar: FC<ILocationBarProps> = observer(
             <StyledText ref={elevationRef}>{mouseCoords.elevation}</StyledText>
           </Section>
           <Section>
-            <StyledText>{t("legend.level")}</StyledText>
+            <StyledText>{("Zoom Level")}</StyledText>
             <StyledText ref={levelRef}>{mouseCoords.level}</StyledText>
           </Section>
         </RawButton>
