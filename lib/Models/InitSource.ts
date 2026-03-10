@@ -22,7 +22,7 @@ export interface InitSourcePickedFeatures {
   }[];
 }
 
-export type ViewModeJson = "3d" | "3dSmooth" | "2d";
+export type ViewModeJson = "2d" | "3dSmooth";
 
 /** Provides loose type hints for ModelJson */
 export interface ModelJson extends JsonObject {
