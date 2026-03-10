@@ -126,6 +126,7 @@ import TimelineStack from "./TimelineStack";
 import { isViewerMode, setViewerMode } from "./ViewerMode";
 import Workbench from "./Workbench";
 import SelectableDimensionWorkflow from "./Workflows/SelectableDimensionWorkflow";
+import CGSSearchProvider from "./SearchProviders/CGSSearchProvider";
 
 export interface ConfigParameters {
   /**
@@ -370,6 +371,8 @@ export interface ConfigParameters {
    */
   searchBarConfig?: ModelPropertiesFromTraits<SearchBarTraits>;
   searchProviders: ModelPropertiesFromTraits<SearchProviderTraits>[];
+  cgsSearchUrl?: string;
+  cgsSearchKey?: string;
 
   /**
    * Keep catalog open when adding / removing items
@@ -1113,6 +1116,18 @@ export default class Terria {
           TerriaError.from(error, "Failed to initialize searchProviders")
         )
       );
+      this.searchBarModel.locationSearchProviders.push(
+        new CGSSearchProvider({
+            terria: this,
+            // You can hardcode these, or ideally map them to your config parameters:
+            url: this.configParameters.cgsSearchUrl, 
+            key: this.configParameters.cgsSearchKey,
+            maxResults: 200,
+            flightDurationSeconds: 1.5
+        })
+    );
+
+      
 
     if (typeof options.beforeRestoreAppState === "function") {
       try {
