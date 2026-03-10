@@ -311,7 +311,7 @@ function addViewSettings(
   let viewerMode: ViewModeJson;
   if (terria.mainViewer.viewerMode === ViewerMode.Cesium) {
     if (terria.mainViewer.viewerOptions.useTerrain) {
-      viewerMode = "3d";
+      viewerMode = "3dSmooth";
     } else {
       viewerMode = "3dSmooth";
     }
