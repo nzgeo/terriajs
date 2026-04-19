@@ -371,8 +371,7 @@ export interface ConfigParameters {
    */
   searchBarConfig?: ModelPropertiesFromTraits<SearchBarTraits>;
   searchProviders: ModelPropertiesFromTraits<SearchProviderTraits>[];
-  cgsSearchUrl?: string;
-  cgsSearchKey?: string;
+  cgsSearchUrl: undefined;
 
   /**
    * Keep catalog open when adding / removing items
@@ -1121,7 +1120,6 @@ export default class Terria {
             terria: this,
             // You can hardcode these, or ideally map them to your config parameters:
             url: this.configParameters.cgsSearchUrl, 
-            key: this.configParameters.cgsSearchKey,
             maxResults: 200,
             flightDurationSeconds: 1.5
         })

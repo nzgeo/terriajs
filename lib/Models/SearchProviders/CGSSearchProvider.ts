@@ -1,13 +1,12 @@
 import { makeObservable, observable, runInAction } from "mobx";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
-import SearchProvider from "../Models/SearchProviders/SearchProvider";
-import SearchResult from "../Models/SearchProviders/SearchResult";
-import SearchProviderResults from "../Models/SearchProviders/SearchProviderResults";
-import Terria from "../Models/Terria";
+import SearchProvider from "./SearchProvider";
+import SearchResult from "./SearchResult";
+import SearchProviderResults from "./SearchProviderResults";
+import Terria from "../Terria";
 
 interface CGSSearchProviderOptions {
     terria: Terria;
-    key?: string;
     url?: string;
     maxResults?: number;
     flightDurationSeconds?: number;
@@ -30,7 +29,6 @@ export default class CGSSearchProvider extends SearchProvider {
         makeObservable(this);
 
         this.terria = options.terria;
-        this.key = options.key;
         this.url = options.url ?? "/search/";
         this.maxResults = options.maxResults ?? 200;
         this.flightDurationSeconds = options.flightDurationSeconds ?? 1.5;
