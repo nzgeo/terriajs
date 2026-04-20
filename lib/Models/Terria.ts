@@ -1111,17 +1111,15 @@ export default class Terria {
         )
       );
 
-    // 1. Initialize the v8 Model with a unique ID and the Terria instance
+    // 1. Initialize the v8 Model with an ID and Terria instance
     const cgsProvider = new CGSSearchProvider("cgs-search-provider", this);
     
-    // 2. Set the variables using v8 traits
-    cgsProvider.setTrait("Common", "url", this.configParameters.cgsSearchUrl);
-    cgsProvider.setTrait("Common", "key", this.configParameters.cgsSearchKey);
+    // 2. Set the standard Native properties
+    cgsProvider.setTrait("Common", "name", "CGS Search");
     cgsProvider.setTrait("Common", "flightDurationSeconds", 1.5);
 
     // 3. Inject it at the top of the UI list
     (this.searchBarModel as any).locationSearchProviders.set("CGS Search", cgsProvider);
-
     this.searchBarModel
       .updateModelConfig(this.configParameters.searchBarConfig)
       .initializeSearchProviders(this.configParameters.searchProviders)

@@ -4,25 +4,13 @@ import Terria from "../Terria";
 import SearchProviderResults from "./SearchProviderResults";
 import SearchResult from "./SearchResult";
 
-// The v8 Mixins and Trait architecture
 import LocationSearchProviderMixin from "../../ModelMixins/SearchProviders/LocationSearchProviderMixin";
 import CreateModel from "../Definition/CreateModel";
 import LocationSearchProviderTraits from "../../Traits/SearchProviders/LocationSearchProviderTraits";
-import mixTraits from "../../Traits/mixTraits";
-import primitiveTrait from "../../Traits/Decorators/primitiveTrait";
 
-// 1. Define the Traits (The v8 way to define properties)
-export class CGSSearchProviderTraits extends mixTraits(LocationSearchProviderTraits) {
-    @primitiveTrait({ type: "string", name: "URL", description: "CGS API URL" })
-    url?: string;
-
-    @primitiveTrait({ type: "string", name: "Key", description: "CGS API Key" })
-    key?: string;
-}
-
-// 2. Create the Model using the Mixin
+// Use the standard Traits to keep TypeScript happy
 export default class CGSSearchProvider extends LocationSearchProviderMixin(
-    CreateModel(CGSSearchProviderTraits)
+    CreateModel(LocationSearchProviderTraits)
 ) {
     static readonly type = "cgs-search";
 
@@ -34,12 +22,12 @@ export default class CGSSearchProvider extends LocationSearchProviderMixin(
         super(id, terria);
         makeObservable(this);
 
-        if (!this.key) {
+        // Read directly from the config parameters we set up earlier
+        if (!this.terria.configParameters.cgsSearchKey) {
             console.warn("The geocoder will always return no results because the CGS Search API Key has not been configured.");
         }
     }
 
-    // Required by LocationSearchProviderMixin in v8
     @override
     protected logEvent(searchText: string) {
         this.terria.analytics?.logEvent("search", "cgs", searchText);
@@ -55,8 +43,11 @@ export default class CGSSearchProvider extends LocationSearchProviderMixin(
         }
 
         try {
-            const baseUrl = this.url ?? "/search/";
-            const keyParam = this.key ? `&key=${encodeURIComponent(this.key)}` : "";
+            // Pull the URL and Key straight from the Terria configuration
+            const baseUrl = this.terria.configParameters.cgsSearchUrl ?? "/search/";
+            const rawKey = this.terria.configParameters.cgsSearchKey;
+            
+            const keyParam = rawKey ? `&key=${encodeURIComponent(rawKey)}` : "";
             
             const response = await fetch(`${baseUrl}api/v1/places?place=${encodeURIComponent(searchText)}&limit=5${keyParam}`);
             if (!response.ok) throw new Error("Network response failed");
