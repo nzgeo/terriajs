@@ -371,7 +371,9 @@ export interface ConfigParameters {
    */
   searchBarConfig?: ModelPropertiesFromTraits<SearchBarTraits>;
   searchProviders: ModelPropertiesFromTraits<SearchProviderTraits>[];
-  cgsSearchUrl: undefined;
+
+  cgsSearchUrl?: string;
+  cgsSearchKey?: string;
 
   /**
    * Keep catalog open when adding / removing items
@@ -603,7 +605,9 @@ export default class Terria {
     aboutButtonHrefUrl: "about.html",
     plugins: undefined,
     searchBarConfig: undefined,
-    searchProviders: []
+    searchProviders: [],
+    cgsSearchUrl: undefined,
+    cgsSearchKey: undefined
   };
 
   @observable
@@ -1107,6 +1111,14 @@ export default class Terria {
         )
       );
 
+      const cgsProvider = new CGSSearchProvider({
+        terria: this,
+        url: this.configParameters.cgsSearchUrl, 
+        key: this.configParameters.cgsSearchKey,
+        maxResults: 200,
+        flightDurationSeconds: 1.5
+      });
+
     this.searchBarModel
       .updateModelConfig(this.configParameters.searchBarConfig)
       .initializeSearchProviders(this.configParameters.searchProviders)
@@ -1115,15 +1127,17 @@ export default class Terria {
           TerriaError.from(error, "Failed to initialize searchProviders")
         )
       );
-      this.searchBarModel.locationSearchProviders.push(
-        new CGSSearchProvider({
-            terria: this,
-            // You can hardcode these, or ideally map them to your config parameters:
-            url: this.configParameters.cgsSearchUrl, 
-            maxResults: 200,
-            flightDurationSeconds: 1.5
-        })
-    );
+
+      (this.searchBarModel as any).locationSearchProviders.set("CGS Search", cgsProvider);
+
+      this.searchBarModel
+      .updateModelConfig(this.configParameters.searchBarConfig)
+      .initializeSearchProviders(this.configParameters.searchProviders)
+      .catchError((error) =>
+        this.raiseErrorToUser(
+          TerriaError.from(error, "Failed to initialize searchProviders")
+        )
+      );
 
       
 

@@ -7,6 +7,7 @@ import Terria from "../Terria";
 
 interface CGSSearchProviderOptions {
     terria: Terria;
+    key?: string;
     url?: string;
     maxResults?: number;
     flightDurationSeconds?: number;
@@ -24,11 +25,10 @@ export default class CGSSearchProvider extends SearchProvider {
 
     constructor(options: CGSSearchProviderOptions) {
         super();
-        
-        // In MobX 6 (used by newer TerriaJS), makeObservable is required in the constructor
         makeObservable(this);
 
         this.terria = options.terria;
+        this.key = options.key;
         this.url = options.url ?? "/search/";
         this.maxResults = options.maxResults ?? 200;
         this.flightDurationSeconds = options.flightDurationSeconds ?? 1.5;
@@ -47,7 +47,10 @@ export default class CGSSearchProvider extends SearchProvider {
         }
 
         try {
-            const response = await fetch(`${this.url}api/v1/places?place=${encodeURIComponent(searchText)}&limit=5`);
+            // Appending the key to the URL parameters
+            const keyParam = this.key ? `&key=${encodeURIComponent(this.key)}` : "";
+            
+            const response = await fetch(`${this.url}api/v1/places?place=${encodeURIComponent(searchText)}&limit=5${keyParam}`);
             if (!response.ok) throw new Error("Network response failed");
             
             const data = await response.json();
@@ -56,14 +59,14 @@ export default class CGSSearchProvider extends SearchProvider {
 
             if (data.length === 0) {
                 runInAction(() => {
-                    searchResults.message = "Sorry, no locations match your search query.";
+                    // FIXED: UI messages in v8 must be an object with a content string
+                    searchResults.message = { content: "Sorry, no locations match your search query." };
                 });
                 return;
             }
 
-            // Fetch geometries concurrently instead of synchronously blocking the thread
             const geometryPromises = data.map(async (place: string) => {
-                const geoResponse = await fetch(`${this.url}api/v1/place/geometry?place=${encodeURIComponent(place)}`);
+                const geoResponse = await fetch(`${this.url}api/v1/place/geometry?place=${encodeURIComponent(place)}${keyParam}`);
                 if (!geoResponse.ok) return [];
                 
                 const geoStructs = await geoResponse.json();
@@ -94,7 +97,8 @@ export default class CGSSearchProvider extends SearchProvider {
             if (searchResults.isCanceled) return;
             
             runInAction(() => {
-                searchResults.message = "An error occurred while searching. Please contact your administrator or try again later.";
+                // FIXED: UI messages in v8 must be an object with a content string
+                searchResults.message = { content: "An error occurred while searching. Please contact your administrator or try again later." };
             });
         }
     }
