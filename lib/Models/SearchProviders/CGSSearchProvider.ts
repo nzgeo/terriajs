@@ -1,43 +1,51 @@
-import { makeObservable, observable, runInAction } from "mobx";
+import { makeObservable, override, runInAction } from "mobx";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
-import LocationSearchProvider from "./LocationSearchProvider";
-import SearchResult from "./SearchResult";
-import SearchProviderResults from "./SearchProviderResults";
 import Terria from "../Terria";
+import SearchProviderResults from "./SearchProviderResults";
+import SearchResult from "./SearchResult";
 
-interface CGSSearchProviderOptions {
-    terria: Terria;
-    key?: string;
+// The v8 Mixins and Trait architecture
+import LocationSearchProviderMixin from "../../ModelMixins/SearchProviders/LocationSearchProviderMixin";
+import CreateModel from "../Definition/CreateModel";
+import LocationSearchProviderTraits from "../../Traits/SearchProviders/LocationSearchProviderTraits";
+import mixTraits from "../../Traits/mixTraits";
+import primitiveTrait from "../../Traits/Decorators/primitiveTrait";
+
+// 1. Define the Traits (The v8 way to define properties)
+export class CGSSearchProviderTraits extends mixTraits(LocationSearchProviderTraits) {
+    @primitiveTrait({ type: "string", name: "URL", description: "CGS API URL" })
     url?: string;
-    maxResults?: number;
-    flightDurationSeconds?: number;
+
+    @primitiveTrait({ type: "string", name: "Key", description: "CGS API Key" })
+    key?: string;
 }
 
-export default class CGSSearchProvider extends LocationSearchProvider {
-    readonly name = "CGS Search";
-    @observable isOpen = true;
+// 2. Create the Model using the Mixin
+export default class CGSSearchProvider extends LocationSearchProviderMixin(
+    CreateModel(CGSSearchProviderTraits)
+) {
+    static readonly type = "cgs-search";
 
-    @observable terria: Terria;
-    @observable key: string | undefined;
-    @observable url: string;
-    @observable maxResults: number;
-    @observable flightDurationSeconds: number;
+    get type() {
+        return CGSSearchProvider.type;
+    }
 
-    constructor(options: CGSSearchProviderOptions) {
-        super();
+    constructor(id: string | undefined, terria: Terria) {
+        super(id, terria);
         makeObservable(this);
-
-        this.terria = options.terria;
-        this.key = options.key;
-        this.url = options.url ?? "/search/";
-        this.maxResults = options.maxResults ?? 200;
-        this.flightDurationSeconds = options.flightDurationSeconds ?? 1.5;
 
         if (!this.key) {
             console.warn("The geocoder will always return no results because the CGS Search API Key has not been configured.");
         }
     }
 
+    // Required by LocationSearchProviderMixin in v8
+    @override
+    protected logEvent(searchText: string) {
+        this.terria.analytics?.logEvent("search", "cgs", searchText);
+    }
+
+    @override
     protected async doSearch(searchText: string, searchResults: SearchProviderResults): Promise<void> {
         searchResults.results.length = 0;
         searchResults.message = undefined;
@@ -47,10 +55,10 @@ export default class CGSSearchProvider extends LocationSearchProvider {
         }
 
         try {
-            // Appending the key to the URL parameters
+            const baseUrl = this.url ?? "/search/";
             const keyParam = this.key ? `&key=${encodeURIComponent(this.key)}` : "";
             
-            const response = await fetch(`${this.url}api/v1/places?place=${encodeURIComponent(searchText)}&limit=5${keyParam}`);
+            const response = await fetch(`${baseUrl}api/v1/places?place=${encodeURIComponent(searchText)}&limit=5${keyParam}`);
             if (!response.ok) throw new Error("Network response failed");
             
             const data = await response.json();
@@ -59,14 +67,13 @@ export default class CGSSearchProvider extends LocationSearchProvider {
 
             if (data.length === 0) {
                 runInAction(() => {
-                    // FIXED: UI messages in v8 must be an object with a content string
                     searchResults.message = { content: "Sorry, no locations match your search query." };
                 });
                 return;
             }
 
             const geometryPromises = data.map(async (place: string) => {
-                const geoResponse = await fetch(`${this.url}api/v1/place/geometry?place=${encodeURIComponent(place)}${keyParam}`);
+                const geoResponse = await fetch(`${baseUrl}api/v1/place/geometry?place=${encodeURIComponent(place)}${keyParam}`);
                 if (!geoResponse.ok) return [];
                 
                 const geoStructs = await geoResponse.json();
@@ -75,7 +82,7 @@ export default class CGSSearchProvider extends LocationSearchProvider {
                     return new SearchResult({
                         name: place,
                         isImportant: true,
-                        clickAction: createZoomToFunction(this.terria, geoStruct, this.flightDurationSeconds),
+                        clickAction: createZoomToFunction(this.terria, geoStruct, this.flightDurationSeconds || 1.5),
                         location: {
                             longitude: geoStruct.bbox[2] - Math.abs(geoStruct.bbox[2] - geoStruct.bbox[0]) / 2,
                             latitude: geoStruct.bbox[3] - Math.abs(geoStruct.bbox[3] - geoStruct.bbox[1]) / 2
@@ -97,7 +104,6 @@ export default class CGSSearchProvider extends LocationSearchProvider {
             if (searchResults.isCanceled) return;
             
             runInAction(() => {
-                // FIXED: UI messages in v8 must be an object with a content string
                 searchResults.message = { content: "An error occurred while searching. Please contact your administrator or try again later." };
             });
         }

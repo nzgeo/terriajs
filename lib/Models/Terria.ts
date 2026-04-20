@@ -1111,13 +1111,16 @@ export default class Terria {
         )
       );
 
-      const cgsProvider = new CGSSearchProvider({
-        terria: this,
-        url: this.configParameters.cgsSearchUrl, 
-        key: this.configParameters.cgsSearchKey,
-        maxResults: 200,
-        flightDurationSeconds: 1.5
-      });
+    // 1. Initialize the v8 Model with a unique ID and the Terria instance
+    const cgsProvider = new CGSSearchProvider("cgs-search-provider", this);
+    
+    // 2. Set the variables using v8 traits
+    cgsProvider.setTrait("Common", "url", this.configParameters.cgsSearchUrl);
+    cgsProvider.setTrait("Common", "key", this.configParameters.cgsSearchKey);
+    cgsProvider.setTrait("Common", "flightDurationSeconds", 1.5);
+
+    // 3. Inject it at the top of the UI list
+    (this.searchBarModel as any).locationSearchProviders.set("CGS Search", cgsProvider);
 
     this.searchBarModel
       .updateModelConfig(this.configParameters.searchBarConfig)
@@ -1127,19 +1130,6 @@ export default class Terria {
           TerriaError.from(error, "Failed to initialize searchProviders")
         )
       );
-
-      (this.searchBarModel as any).locationSearchProviders.set("CGS Search", cgsProvider);
-
-      this.searchBarModel
-      .updateModelConfig(this.configParameters.searchBarConfig)
-      .initializeSearchProviders(this.configParameters.searchProviders)
-      .catchError((error) =>
-        this.raiseErrorToUser(
-          TerriaError.from(error, "Failed to initialize searchProviders")
-        )
-      );
-
-      
 
     if (typeof options.beforeRestoreAppState === "function") {
       try {
