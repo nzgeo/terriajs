@@ -1,6 +1,6 @@
 import { makeObservable, observable, runInAction } from "mobx";
 import Rectangle from "terriajs-cesium/Source/Core/Rectangle";
-import SearchProvider from "./SearchProvider";
+import LocationSearchProvider from "./LocationSearchProvider";
 import SearchResult from "./SearchResult";
 import SearchProviderResults from "./SearchProviderResults";
 import Terria from "../Terria";
@@ -13,7 +13,7 @@ interface CGSSearchProviderOptions {
     flightDurationSeconds?: number;
 }
 
-export default class CGSSearchProvider extends SearchProvider {
+export default class CGSSearchProvider extends LocationSearchProvider {
     readonly name = "CGS Search";
     @observable isOpen = true;
 
